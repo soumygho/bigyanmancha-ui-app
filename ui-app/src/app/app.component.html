@@ -1,0 +1,32 @@
+<div
+  class="container-fluid h-100 bg-transparent"
+  style="color: #343636; font-family: Roboto, sans-serif"
+>
+  <div class="row h-30">
+    <div class="col-md-8 mx-auto my-auto">
+      <app-header></app-header>
+    </div>
+  </div>
+  <div class="row h-50">
+    <div class="col-md-8 mx-auto my-auto">
+      <div class="container-fluid my-2">
+        <div class="row">
+          <div class="col-md-2">
+            <app-sidebar></app-sidebar>
+          </div>
+          <div class="col-md-8">
+            <router-outlet></router-outlet>
+          </div>
+          <div class="col-md-2">
+            <app-upcoming-event></app-upcoming-event>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row h-20">
+    <div class="col-md-8 mx-auto my-auto">
+      <app-footer></app-footer>
+    </div>
+  </div>
+</div>

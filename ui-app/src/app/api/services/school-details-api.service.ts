@@ -13,11 +13,15 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { createSchool } from '../fn/school-details-api/create-school';
 import { CreateSchool$Params } from '../fn/school-details-api/create-school';
+import { deleteSchool } from '../fn/school-details-api/delete-school';
+import { DeleteSchool$Params } from '../fn/school-details-api/delete-school';
 import { getAllSchools } from '../fn/school-details-api/get-all-schools';
 import { GetAllSchools$Params } from '../fn/school-details-api/get-all-schools';
 import { getSchoolById } from '../fn/school-details-api/get-school-by-id';
 import { GetSchoolById$Params } from '../fn/school-details-api/get-school-by-id';
 import { SchoolDetailsRequestDto } from '../models/school-details-request-dto';
+import { updateSchool } from '../fn/school-details-api/update-school';
+import { UpdateSchool$Params } from '../fn/school-details-api/update-school';
 
 @Injectable({ providedIn: 'root' })
 export class SchoolDetailsApiService extends BaseService {
@@ -50,6 +54,31 @@ export class SchoolDetailsApiService extends BaseService {
     );
   }
 
+  /** Path part for operation `updateSchool()` */
+  static readonly UpdateSchoolPath = '/api/schools';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateSchool()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateSchool$Response(params: UpdateSchool$Params, context?: HttpContext): Observable<StrictHttpResponse<SchoolDetailsRequestDto>> {
+    return updateSchool(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateSchool$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateSchool(params: UpdateSchool$Params, context?: HttpContext): Observable<SchoolDetailsRequestDto> {
+    return this.updateSchool$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SchoolDetailsRequestDto>): SchoolDetailsRequestDto => r.body)
+    );
+  }
+
   /** Path part for operation `createSchool()` */
   static readonly CreateSchoolPath = '/api/schools';
 
@@ -72,6 +101,31 @@ export class SchoolDetailsApiService extends BaseService {
   createSchool(params: CreateSchool$Params, context?: HttpContext): Observable<SchoolDetailsRequestDto> {
     return this.createSchool$Response(params, context).pipe(
       map((r: StrictHttpResponse<SchoolDetailsRequestDto>): SchoolDetailsRequestDto => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteSchool()` */
+  static readonly DeleteSchoolPath = '/api/schools';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteSchool()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteSchool$Response(params: DeleteSchool$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteSchool(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteSchool$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteSchool(params: DeleteSchool$Params, context?: HttpContext): Observable<void> {
+    return this.deleteSchool$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

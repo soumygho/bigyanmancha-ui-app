@@ -21,7 +21,7 @@ import { registerUser } from '../fn/user-management-api/register-user';
 import { RegisterUser$Params } from '../fn/user-management-api/register-user';
 import { updateUser } from '../fn/user-management-api/update-user';
 import { UpdateUser$Params } from '../fn/user-management-api/update-user';
-import { UserDetails } from '../models/user-details';
+import { UserDetailsResponseDto } from '../models/user-details-response-dto';
 
 @Injectable({ providedIn: 'root' })
 export class UserManagementApiService extends BaseService {
@@ -38,7 +38,7 @@ export class UserManagementApiService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getUser$Response(params: GetUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetails>> {
+  getUser$Response(params: GetUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetailsResponseDto>> {
     return getUser(this.http, this.rootUrl, params, context);
   }
 
@@ -48,9 +48,9 @@ export class UserManagementApiService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getUser(params: GetUser$Params, context?: HttpContext): Observable<UserDetails> {
+  getUser(params: GetUser$Params, context?: HttpContext): Observable<UserDetailsResponseDto> {
     return this.getUser$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UserDetails>): UserDetails => r.body)
+      map((r: StrictHttpResponse<UserDetailsResponseDto>): UserDetailsResponseDto => r.body)
     );
   }
 
@@ -63,7 +63,7 @@ export class UserManagementApiService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateUser$Response(params: UpdateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetails>> {
+  updateUser$Response(params: UpdateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetailsResponseDto>> {
     return updateUser(this.http, this.rootUrl, params, context);
   }
 
@@ -73,9 +73,9 @@ export class UserManagementApiService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateUser(params: UpdateUser$Params, context?: HttpContext): Observable<UserDetails> {
+  updateUser(params: UpdateUser$Params, context?: HttpContext): Observable<UserDetailsResponseDto> {
     return this.updateUser$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UserDetails>): UserDetails => r.body)
+      map((r: StrictHttpResponse<UserDetailsResponseDto>): UserDetailsResponseDto => r.body)
     );
   }
 
@@ -113,7 +113,7 @@ export class UserManagementApiService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllUsers$Response(params?: GetAllUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserDetails>>> {
+  getAllUsers$Response(params?: GetAllUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserDetailsResponseDto>>> {
     return getAllUsers(this.http, this.rootUrl, params, context);
   }
 
@@ -123,9 +123,9 @@ export class UserManagementApiService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllUsers(params?: GetAllUsers$Params, context?: HttpContext): Observable<Array<UserDetails>> {
+  getAllUsers(params?: GetAllUsers$Params, context?: HttpContext): Observable<Array<UserDetailsResponseDto>> {
     return this.getAllUsers$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<UserDetails>>): Array<UserDetails> => r.body)
+      map((r: StrictHttpResponse<Array<UserDetailsResponseDto>>): Array<UserDetailsResponseDto> => r.body)
     );
   }
 
@@ -138,8 +138,7 @@ export class UserManagementApiService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  registerUser$Response(params: RegisterUser$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
+  registerUser$Response(params: RegisterUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetailsResponseDto>> {
     return registerUser(this.http, this.rootUrl, params, context);
   }
 
@@ -149,12 +148,9 @@ export class UserManagementApiService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  registerUser(params: RegisterUser$Params, context?: HttpContext): Observable<{
-}> {
+  registerUser(params: RegisterUser$Params, context?: HttpContext): Observable<UserDetailsResponseDto> {
     return this.registerUser$Response(params, context).pipe(
-      map((r: StrictHttpResponse<{
-}>): {
-} => r.body)
+      map((r: StrictHttpResponse<UserDetailsResponseDto>): UserDetailsResponseDto => r.body)
     );
   }
 

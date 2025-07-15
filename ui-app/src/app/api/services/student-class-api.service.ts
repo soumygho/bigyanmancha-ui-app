@@ -11,17 +11,17 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { create1 } from '../fn/student-class-api/create-1';
-import { Create1$Params } from '../fn/student-class-api/create-1';
-import { delete3 } from '../fn/student-class-api/delete-3';
-import { Delete3$Params } from '../fn/student-class-api/delete-3';
-import { getAll1 } from '../fn/student-class-api/get-all-1';
-import { GetAll1$Params } from '../fn/student-class-api/get-all-1';
-import { getById4 } from '../fn/student-class-api/get-by-id-4';
-import { GetById4$Params } from '../fn/student-class-api/get-by-id-4';
+import { createClass } from '../fn/student-class-api/create-class';
+import { CreateClass$Params } from '../fn/student-class-api/create-class';
+import { deleteClass } from '../fn/student-class-api/delete-class';
+import { DeleteClass$Params } from '../fn/student-class-api/delete-class';
+import { getAllClasses } from '../fn/student-class-api/get-all-classes';
+import { GetAllClasses$Params } from '../fn/student-class-api/get-all-classes';
+import { getClassById } from '../fn/student-class-api/get-class-by-id';
+import { GetClassById$Params } from '../fn/student-class-api/get-class-by-id';
 import { StudentClassDetailsResponseDto } from '../models/student-class-details-response-dto';
-import { update1 } from '../fn/student-class-api/update-1';
-import { Update1$Params } from '../fn/student-class-api/update-1';
+import { updateClass } from '../fn/student-class-api/update-class';
+import { UpdateClass$Params } from '../fn/student-class-api/update-class';
 
 @Injectable({ providedIn: 'root' })
 export class StudentClassApiService extends BaseService {
@@ -29,127 +29,127 @@ export class StudentClassApiService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `getAll1()` */
-  static readonly GetAll1Path = '/api/student-class';
+  /** Path part for operation `getAllClasses()` */
+  static readonly GetAllClassesPath = '/api/student-class';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll1()` instead.
+   * To access only the response body, use `getAllClasses()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll1$Response(params?: GetAll1$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<StudentClassDetailsResponseDto>>> {
-    return getAll1(this.http, this.rootUrl, params, context);
+  getAllClasses$Response(params?: GetAllClasses$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<StudentClassDetailsResponseDto>>> {
+    return getAllClasses(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAll1$Response()` instead.
+   * To access the full response (for headers, for example), `getAllClasses$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll1(params?: GetAll1$Params, context?: HttpContext): Observable<Array<StudentClassDetailsResponseDto>> {
-    return this.getAll1$Response(params, context).pipe(
+  getAllClasses(params?: GetAllClasses$Params, context?: HttpContext): Observable<Array<StudentClassDetailsResponseDto>> {
+    return this.getAllClasses$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<StudentClassDetailsResponseDto>>): Array<StudentClassDetailsResponseDto> => r.body)
     );
   }
 
-  /** Path part for operation `update1()` */
-  static readonly Update1Path = '/api/student-class';
+  /** Path part for operation `updateClass()` */
+  static readonly UpdateClassPath = '/api/student-class';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update1()` instead.
+   * To access only the response body, use `updateClass()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update1$Response(params: Update1$Params, context?: HttpContext): Observable<StrictHttpResponse<StudentClassDetailsResponseDto>> {
-    return update1(this.http, this.rootUrl, params, context);
+  updateClass$Response(params: UpdateClass$Params, context?: HttpContext): Observable<StrictHttpResponse<StudentClassDetailsResponseDto>> {
+    return updateClass(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `update1$Response()` instead.
+   * To access the full response (for headers, for example), `updateClass$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update1(params: Update1$Params, context?: HttpContext): Observable<StudentClassDetailsResponseDto> {
-    return this.update1$Response(params, context).pipe(
+  updateClass(params: UpdateClass$Params, context?: HttpContext): Observable<StudentClassDetailsResponseDto> {
+    return this.updateClass$Response(params, context).pipe(
       map((r: StrictHttpResponse<StudentClassDetailsResponseDto>): StudentClassDetailsResponseDto => r.body)
     );
   }
 
-  /** Path part for operation `create1()` */
-  static readonly Create1Path = '/api/student-class';
+  /** Path part for operation `createClass()` */
+  static readonly CreateClassPath = '/api/student-class';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create1()` instead.
+   * To access only the response body, use `createClass()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create1$Response(params: Create1$Params, context?: HttpContext): Observable<StrictHttpResponse<StudentClassDetailsResponseDto>> {
-    return create1(this.http, this.rootUrl, params, context);
+  createClass$Response(params: CreateClass$Params, context?: HttpContext): Observable<StrictHttpResponse<StudentClassDetailsResponseDto>> {
+    return createClass(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `create1$Response()` instead.
+   * To access the full response (for headers, for example), `createClass$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create1(params: Create1$Params, context?: HttpContext): Observable<StudentClassDetailsResponseDto> {
-    return this.create1$Response(params, context).pipe(
+  createClass(params: CreateClass$Params, context?: HttpContext): Observable<StudentClassDetailsResponseDto> {
+    return this.createClass$Response(params, context).pipe(
       map((r: StrictHttpResponse<StudentClassDetailsResponseDto>): StudentClassDetailsResponseDto => r.body)
     );
   }
 
-  /** Path part for operation `getById4()` */
-  static readonly GetById4Path = '/api/student-class/{id}';
+  /** Path part for operation `getClassById()` */
+  static readonly GetClassByIdPath = '/api/student-class/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById4()` instead.
+   * To access only the response body, use `getClassById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById4$Response(params: GetById4$Params, context?: HttpContext): Observable<StrictHttpResponse<StudentClassDetailsResponseDto>> {
-    return getById4(this.http, this.rootUrl, params, context);
+  getClassById$Response(params: GetClassById$Params, context?: HttpContext): Observable<StrictHttpResponse<StudentClassDetailsResponseDto>> {
+    return getClassById(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getById4$Response()` instead.
+   * To access the full response (for headers, for example), `getClassById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById4(params: GetById4$Params, context?: HttpContext): Observable<StudentClassDetailsResponseDto> {
-    return this.getById4$Response(params, context).pipe(
+  getClassById(params: GetClassById$Params, context?: HttpContext): Observable<StudentClassDetailsResponseDto> {
+    return this.getClassById$Response(params, context).pipe(
       map((r: StrictHttpResponse<StudentClassDetailsResponseDto>): StudentClassDetailsResponseDto => r.body)
     );
   }
 
-  /** Path part for operation `delete3()` */
-  static readonly Delete3Path = '/api/student-class/{id}';
+  /** Path part for operation `deleteClass()` */
+  static readonly DeleteClassPath = '/api/student-class/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete3()` instead.
+   * To access only the response body, use `deleteClass()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete3$Response(params: Delete3$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return delete3(this.http, this.rootUrl, params, context);
+  deleteClass$Response(params: DeleteClass$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteClass(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete3$Response()` instead.
+   * To access the full response (for headers, for example), `deleteClass$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete3(params: Delete3$Params, context?: HttpContext): Observable<void> {
-    return this.delete3$Response(params, context).pipe(
+  deleteClass(params: DeleteClass$Params, context?: HttpContext): Observable<void> {
+    return this.deleteClass$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }

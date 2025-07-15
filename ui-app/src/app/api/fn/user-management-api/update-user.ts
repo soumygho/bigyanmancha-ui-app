@@ -9,24 +9,24 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { SignupRequest } from '../../models/signup-request';
-import { UserDetails } from '../../models/user-details';
+import { UserDetailsResponseDto } from '../../models/user-details-response-dto';
 
 export interface UpdateUser$Params {
       body: SignupRequest
 }
 
-export function updateUser(http: HttpClient, rootUrl: string, params: UpdateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetails>> {
+export function updateUser(http: HttpClient, rootUrl: string, params: UpdateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetailsResponseDto>> {
   const rb = new RequestBuilder(rootUrl, updateUser.PATH, 'put');
   if (params) {
     rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UserDetails>;
+      return r as StrictHttpResponse<UserDetailsResponseDto>;
     })
   );
 }

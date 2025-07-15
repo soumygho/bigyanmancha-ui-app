@@ -13,6 +13,7 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { authenticateUser } from '../fn/auth-api/authenticate-user';
 import { AuthenticateUser$Params } from '../fn/auth-api/authenticate-user';
+import { JwtResponse } from '../models/jwt-response';
 
 @Injectable({ providedIn: 'root' })
 export class AuthApiService extends BaseService {
@@ -29,8 +30,7 @@ export class AuthApiService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  authenticateUser$Response(params: AuthenticateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
+  authenticateUser$Response(params: AuthenticateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<JwtResponse>> {
     return authenticateUser(this.http, this.rootUrl, params, context);
   }
 
@@ -40,12 +40,9 @@ export class AuthApiService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  authenticateUser(params: AuthenticateUser$Params, context?: HttpContext): Observable<{
-}> {
+  authenticateUser(params: AuthenticateUser$Params, context?: HttpContext): Observable<JwtResponse> {
     return this.authenticateUser$Response(params, context).pipe(
-      map((r: StrictHttpResponse<{
-}>): {
-} => r.body)
+      map((r: StrictHttpResponse<JwtResponse>): JwtResponse => r.body)
     );
   }
 

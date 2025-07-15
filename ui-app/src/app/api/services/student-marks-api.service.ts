@@ -11,14 +11,14 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { create2 } from '../fn/student-marks-api/create-2';
-import { Create2$Params } from '../fn/student-marks-api/create-2';
-import { delete2 } from '../fn/student-marks-api/delete-2';
-import { Delete2$Params } from '../fn/student-marks-api/delete-2';
-import { getAll3 } from '../fn/student-marks-api/get-all-3';
-import { GetAll3$Params } from '../fn/student-marks-api/get-all-3';
-import { getById3 } from '../fn/student-marks-api/get-by-id-3';
-import { GetById3$Params } from '../fn/student-marks-api/get-by-id-3';
+import { createMarks } from '../fn/student-marks-api/create-marks';
+import { CreateMarks$Params } from '../fn/student-marks-api/create-marks';
+import { deleteMarks } from '../fn/student-marks-api/delete-marks';
+import { DeleteMarks$Params } from '../fn/student-marks-api/delete-marks';
+import { getAllMarks } from '../fn/student-marks-api/get-all-marks';
+import { GetAllMarks$Params } from '../fn/student-marks-api/get-all-marks';
+import { getMarksById } from '../fn/student-marks-api/get-marks-by-id';
+import { GetMarksById$Params } from '../fn/student-marks-api/get-marks-by-id';
 import { StudentMarksRequestDto } from '../models/student-marks-request-dto';
 
 
@@ -31,8 +31,8 @@ export class StudentMarksApiService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `getAll3()` */
-  static readonly GetAll3Path = '/api/student-marks';
+  /** Path part for operation `getAllMarks()` */
+  static readonly GetAllMarksPath = '/api/student-marks';
 
   /**
    * Get all StudentMarks.
@@ -40,12 +40,12 @@ export class StudentMarksApiService extends BaseService {
    * Returns a list of all student marks records.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll3()` instead.
+   * To access only the response body, use `getAllMarks()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll3$Response(params?: GetAll3$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<StudentMarksRequestDto>>> {
-    return getAll3(this.http, this.rootUrl, params, context);
+  getAllMarks$Response(params?: GetAllMarks$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<StudentMarksRequestDto>>> {
+    return getAllMarks(this.http, this.rootUrl, params, context);
   }
 
   /**
@@ -54,18 +54,18 @@ export class StudentMarksApiService extends BaseService {
    * Returns a list of all student marks records.
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAll3$Response()` instead.
+   * To access the full response (for headers, for example), `getAllMarks$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll3(params?: GetAll3$Params, context?: HttpContext): Observable<Array<StudentMarksRequestDto>> {
-    return this.getAll3$Response(params, context).pipe(
+  getAllMarks(params?: GetAllMarks$Params, context?: HttpContext): Observable<Array<StudentMarksRequestDto>> {
+    return this.getAllMarks$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<StudentMarksRequestDto>>): Array<StudentMarksRequestDto> => r.body)
     );
   }
 
-  /** Path part for operation `create2()` */
-  static readonly Create2Path = '/api/student-marks';
+  /** Path part for operation `createMarks()` */
+  static readonly CreateMarksPath = '/api/student-marks';
 
   /**
    * Create a new StudentMarks record.
@@ -73,12 +73,12 @@ export class StudentMarksApiService extends BaseService {
    * Create a student marks record by specifying student, subject, and marks.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create2()` instead.
+   * To access only the response body, use `createMarks()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create2$Response(params: Create2$Params, context?: HttpContext): Observable<StrictHttpResponse<StudentMarksRequestDto>> {
-    return create2(this.http, this.rootUrl, params, context);
+  createMarks$Response(params: CreateMarks$Params, context?: HttpContext): Observable<StrictHttpResponse<StudentMarksRequestDto>> {
+    return createMarks(this.http, this.rootUrl, params, context);
   }
 
   /**
@@ -87,18 +87,18 @@ export class StudentMarksApiService extends BaseService {
    * Create a student marks record by specifying student, subject, and marks.
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `create2$Response()` instead.
+   * To access the full response (for headers, for example), `createMarks$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create2(params: Create2$Params, context?: HttpContext): Observable<StudentMarksRequestDto> {
-    return this.create2$Response(params, context).pipe(
+  createMarks(params: CreateMarks$Params, context?: HttpContext): Observable<StudentMarksRequestDto> {
+    return this.createMarks$Response(params, context).pipe(
       map((r: StrictHttpResponse<StudentMarksRequestDto>): StudentMarksRequestDto => r.body)
     );
   }
 
-  /** Path part for operation `getById3()` */
-  static readonly GetById3Path = '/api/student-marks/{id}';
+  /** Path part for operation `getMarksById()` */
+  static readonly GetMarksByIdPath = '/api/student-marks/{id}';
 
   /**
    * Get a StudentMarks record by ID.
@@ -106,12 +106,12 @@ export class StudentMarksApiService extends BaseService {
    * Returns the student marks record for the given ID.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById3()` instead.
+   * To access only the response body, use `getMarksById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById3$Response(params: GetById3$Params, context?: HttpContext): Observable<StrictHttpResponse<StudentMarksRequestDto>> {
-    return getById3(this.http, this.rootUrl, params, context);
+  getMarksById$Response(params: GetMarksById$Params, context?: HttpContext): Observable<StrictHttpResponse<StudentMarksRequestDto>> {
+    return getMarksById(this.http, this.rootUrl, params, context);
   }
 
   /**
@@ -120,18 +120,18 @@ export class StudentMarksApiService extends BaseService {
    * Returns the student marks record for the given ID.
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getById3$Response()` instead.
+   * To access the full response (for headers, for example), `getMarksById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById3(params: GetById3$Params, context?: HttpContext): Observable<StudentMarksRequestDto> {
-    return this.getById3$Response(params, context).pipe(
+  getMarksById(params: GetMarksById$Params, context?: HttpContext): Observable<StudentMarksRequestDto> {
+    return this.getMarksById$Response(params, context).pipe(
       map((r: StrictHttpResponse<StudentMarksRequestDto>): StudentMarksRequestDto => r.body)
     );
   }
 
-  /** Path part for operation `delete2()` */
-  static readonly Delete2Path = '/api/student-marks/{id}';
+  /** Path part for operation `deleteMarks()` */
+  static readonly DeleteMarksPath = '/api/student-marks/{id}';
 
   /**
    * Delete a StudentMarks record by ID.
@@ -139,12 +139,12 @@ export class StudentMarksApiService extends BaseService {
    * Deletes the specified student marks record.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete2()` instead.
+   * To access only the response body, use `deleteMarks()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete2$Response(params: Delete2$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return delete2(this.http, this.rootUrl, params, context);
+  deleteMarks$Response(params: DeleteMarks$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteMarks(this.http, this.rootUrl, params, context);
   }
 
   /**
@@ -153,12 +153,12 @@ export class StudentMarksApiService extends BaseService {
    * Deletes the specified student marks record.
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete2$Response()` instead.
+   * To access the full response (for headers, for example), `deleteMarks$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete2(params: Delete2$Params, context?: HttpContext): Observable<void> {
-    return this.delete2$Response(params, context).pipe(
+  deleteMarks(params: DeleteMarks$Params, context?: HttpContext): Observable<void> {
+    return this.deleteMarks$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }

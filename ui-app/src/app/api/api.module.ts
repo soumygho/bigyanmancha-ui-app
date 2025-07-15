@@ -6,14 +6,14 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { VigyankendraDeatilsApiService } from './services/vigyankendra-deatils-api.service';
 import { UserManagementApiService } from './services/user-management-api.service';
 import { SubjectDetailsApiService } from './services/subject-details-api.service';
-import { StudentClassApiService } from './services/student-class-api.service';
-import { ExaminationCentreDetailsApiService } from './services/examination-centre-details-api.service';
-import { VigyankendraDeatilsApiService } from './services/vigyankendra-deatils-api.service';
 import { StudentEnrollmentApiService } from './services/student-enrollment-api.service';
-import { StudentMarksApiService } from './services/student-marks-api.service';
+import { StudentClassApiService } from './services/student-class-api.service';
 import { SchoolDetailsApiService } from './services/school-details-api.service';
+import { ExaminationCentreDetailsApiService } from './services/examination-centre-details-api.service';
+import { StudentMarksApiService } from './services/student-marks-api.service';
 import { AuthApiService } from './services/auth-api.service';
 
 /**
@@ -24,14 +24,14 @@ import { AuthApiService } from './services/auth-api.service';
   exports: [],
   declarations: [],
   providers: [
+    VigyankendraDeatilsApiService,
     UserManagementApiService,
     SubjectDetailsApiService,
-    StudentClassApiService,
-    ExaminationCentreDetailsApiService,
-    VigyankendraDeatilsApiService,
     StudentEnrollmentApiService,
-    StudentMarksApiService,
+    StudentClassApiService,
     SchoolDetailsApiService,
+    ExaminationCentreDetailsApiService,
+    StudentMarksApiService,
     AuthApiService,
     ApiConfiguration
   ],

@@ -4,8 +4,10 @@
 
 export type { ExaminationCentreDetails } from './models/examination-centre-details';
 export type { ExaminationCentreDetailsRequestDto } from './models/examination-centre-details-request-dto';
+export type { JwtResponse } from './models/jwt-response';
 export type { LoginRequest } from './models/login-request';
 export type { Role } from './models/role';
+export type { SchoolAssignDeAssignRequest } from './models/school-assign-de-assign-request';
 export type { SchoolDetails } from './models/school-details';
 export type { SchoolDetailsRequestDto } from './models/school-details-request-dto';
 export type { SchoolDetailsResponseDto } from './models/school-details-response-dto';
@@ -21,5 +23,6 @@ export type { SubjectDetails } from './models/subject-details';
 export type { SubjectDetailsRequestDto } from './models/subject-details-request-dto';
 export type { SubjectDetailsResponseDto } from './models/subject-details-response-dto';
 export type { UserDetails } from './models/user-details';
+export type { UserDetailsResponseDto } from './models/user-details-response-dto';
 export type { VigyanKendraDetails } from './models/vigyan-kendra-details';
 export type { VigyanKendraDetailsRequestDto } from './models/vigyan-kendra-details-request-dto';

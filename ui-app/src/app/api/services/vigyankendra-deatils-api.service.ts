@@ -11,19 +11,23 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { getAll2 } from '../fn/vigyankendra-deatils-api/get-all-2';
-import { GetAll2$Params } from '../fn/vigyankendra-deatils-api/get-all-2';
-import { getByCode } from '../fn/vigyankendra-deatils-api/get-by-code';
-import { GetByCode$Params } from '../fn/vigyankendra-deatils-api/get-by-code';
-import { getById1 } from '../fn/vigyankendra-deatils-api/get-by-id-1';
-import { GetById1$Params } from '../fn/vigyankendra-deatils-api/get-by-id-1';
-import { getSchoolsByCode } from '../fn/vigyankendra-deatils-api/get-schools-by-code';
-import { GetSchoolsByCode$Params } from '../fn/vigyankendra-deatils-api/get-schools-by-code';
-import { getUsersById } from '../fn/vigyankendra-deatils-api/get-users-by-id';
-import { GetUsersById$Params } from '../fn/vigyankendra-deatils-api/get-users-by-id';
-import { getVigyanKendraDetails } from '../fn/vigyankendra-deatils-api/get-vigyan-kendra-details';
-import { GetVigyanKendraDetails$Params } from '../fn/vigyankendra-deatils-api/get-vigyan-kendra-details';
+import { createVigyanKendraDetails } from '../fn/vigyankendra-deatils-api/create-vigyan-kendra-details';
+import { CreateVigyanKendraDetails$Params } from '../fn/vigyankendra-deatils-api/create-vigyan-kendra-details';
+import { deleteVigyanKendraById } from '../fn/vigyankendra-deatils-api/delete-vigyan-kendra-by-id';
+import { DeleteVigyanKendraById$Params } from '../fn/vigyankendra-deatils-api/delete-vigyan-kendra-by-id';
+import { getAllVigyanKendras } from '../fn/vigyankendra-deatils-api/get-all-vigyan-kendras';
+import { GetAllVigyanKendras$Params } from '../fn/vigyankendra-deatils-api/get-all-vigyan-kendras';
+import { getSchoolsByVigyanKendraId } from '../fn/vigyankendra-deatils-api/get-schools-by-vigyan-kendra-id';
+import { GetSchoolsByVigyanKendraId$Params } from '../fn/vigyankendra-deatils-api/get-schools-by-vigyan-kendra-id';
+import { getUsersByVigyanKendraId } from '../fn/vigyankendra-deatils-api/get-users-by-vigyan-kendra-id';
+import { GetUsersByVigyanKendraId$Params } from '../fn/vigyankendra-deatils-api/get-users-by-vigyan-kendra-id';
+import { getVigyanKendraByCode } from '../fn/vigyankendra-deatils-api/get-vigyan-kendra-by-code';
+import { GetVigyanKendraByCode$Params } from '../fn/vigyankendra-deatils-api/get-vigyan-kendra-by-code';
+import { getVigyanKendraById } from '../fn/vigyankendra-deatils-api/get-vigyan-kendra-by-id';
+import { GetVigyanKendraById$Params } from '../fn/vigyankendra-deatils-api/get-vigyan-kendra-by-id';
 import { SchoolDetailsResponseDto } from '../models/school-details-response-dto';
+import { updateVigyanKendraDetails } from '../fn/vigyankendra-deatils-api/update-vigyan-kendra-details';
+import { UpdateVigyanKendraDetails$Params } from '../fn/vigyankendra-deatils-api/update-vigyan-kendra-details';
 import { UserDetails } from '../models/user-details';
 import { VigyanKendraDetailsRequestDto } from '../models/vigyan-kendra-details-request-dto';
 
@@ -37,152 +41,202 @@ export class VigyankendraDeatilsApiService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `getAll2()` */
-  static readonly GetAll2Path = '/api/vigyan-kendra';
+  /** Path part for operation `getAllVigyanKendras()` */
+  static readonly GetAllVigyanKendrasPath = '/api/vigyan-kendra';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll2()` instead.
+   * To access only the response body, use `getAllVigyanKendras()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll2$Response(params?: GetAll2$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<VigyanKendraDetailsRequestDto>>> {
-    return getAll2(this.http, this.rootUrl, params, context);
+  getAllVigyanKendras$Response(params?: GetAllVigyanKendras$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<VigyanKendraDetailsRequestDto>>> {
+    return getAllVigyanKendras(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAll2$Response()` instead.
+   * To access the full response (for headers, for example), `getAllVigyanKendras$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll2(params?: GetAll2$Params, context?: HttpContext): Observable<Array<VigyanKendraDetailsRequestDto>> {
-    return this.getAll2$Response(params, context).pipe(
+  getAllVigyanKendras(params?: GetAllVigyanKendras$Params, context?: HttpContext): Observable<Array<VigyanKendraDetailsRequestDto>> {
+    return this.getAllVigyanKendras$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<VigyanKendraDetailsRequestDto>>): Array<VigyanKendraDetailsRequestDto> => r.body)
     );
   }
 
-  /** Path part for operation `getVigyanKendraDetails()` */
-  static readonly GetVigyanKendraDetailsPath = '/api/vigyan-kendra';
+  /** Path part for operation `updateVigyanKendraDetails()` */
+  static readonly UpdateVigyanKendraDetailsPath = '/api/vigyan-kendra';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getVigyanKendraDetails()` instead.
+   * To access only the response body, use `updateVigyanKendraDetails()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  getVigyanKendraDetails$Response(params: GetVigyanKendraDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<VigyanKendraDetailsRequestDto>> {
-    return getVigyanKendraDetails(this.http, this.rootUrl, params, context);
+  updateVigyanKendraDetails$Response(params: UpdateVigyanKendraDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<VigyanKendraDetailsRequestDto>> {
+    return updateVigyanKendraDetails(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getVigyanKendraDetails$Response()` instead.
+   * To access the full response (for headers, for example), `updateVigyanKendraDetails$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  getVigyanKendraDetails(params: GetVigyanKendraDetails$Params, context?: HttpContext): Observable<VigyanKendraDetailsRequestDto> {
-    return this.getVigyanKendraDetails$Response(params, context).pipe(
+  updateVigyanKendraDetails(params: UpdateVigyanKendraDetails$Params, context?: HttpContext): Observable<VigyanKendraDetailsRequestDto> {
+    return this.updateVigyanKendraDetails$Response(params, context).pipe(
       map((r: StrictHttpResponse<VigyanKendraDetailsRequestDto>): VigyanKendraDetailsRequestDto => r.body)
     );
   }
 
-  /** Path part for operation `getById1()` */
-  static readonly GetById1Path = '/api/vigyan-kendra/{id}';
+  /** Path part for operation `createVigyanKendraDetails()` */
+  static readonly CreateVigyanKendraDetailsPath = '/api/vigyan-kendra';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById1()` instead.
+   * To access only the response body, use `createVigyanKendraDetails()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  getById1$Response(params: GetById1$Params, context?: HttpContext): Observable<StrictHttpResponse<VigyanKendraDetailsRequestDto>> {
-    return getById1(this.http, this.rootUrl, params, context);
+  createVigyanKendraDetails$Response(params: CreateVigyanKendraDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<VigyanKendraDetailsRequestDto>> {
+    return createVigyanKendraDetails(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getById1$Response()` instead.
+   * To access the full response (for headers, for example), `createVigyanKendraDetails$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  getById1(params: GetById1$Params, context?: HttpContext): Observable<VigyanKendraDetailsRequestDto> {
-    return this.getById1$Response(params, context).pipe(
+  createVigyanKendraDetails(params: CreateVigyanKendraDetails$Params, context?: HttpContext): Observable<VigyanKendraDetailsRequestDto> {
+    return this.createVigyanKendraDetails$Response(params, context).pipe(
       map((r: StrictHttpResponse<VigyanKendraDetailsRequestDto>): VigyanKendraDetailsRequestDto => r.body)
     );
   }
 
-  /** Path part for operation `getUsersById()` */
-  static readonly GetUsersByIdPath = '/api/vigyan-kendra/users/{id}';
+  /** Path part for operation `deleteVigyanKendraById()` */
+  static readonly DeleteVigyanKendraByIdPath = '/api/vigyan-kendra';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getUsersById()` instead.
+   * To access only the response body, use `deleteVigyanKendraById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getUsersById$Response(params: GetUsersById$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserDetails>>> {
-    return getUsersById(this.http, this.rootUrl, params, context);
+  deleteVigyanKendraById$Response(params: DeleteVigyanKendraById$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteVigyanKendraById(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getUsersById$Response()` instead.
+   * To access the full response (for headers, for example), `deleteVigyanKendraById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getUsersById(params: GetUsersById$Params, context?: HttpContext): Observable<Array<UserDetails>> {
-    return this.getUsersById$Response(params, context).pipe(
+  deleteVigyanKendraById(params: DeleteVigyanKendraById$Params, context?: HttpContext): Observable<void> {
+    return this.deleteVigyanKendraById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `getVigyanKendraById()` */
+  static readonly GetVigyanKendraByIdPath = '/api/vigyan-kendra/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getVigyanKendraById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getVigyanKendraById$Response(params: GetVigyanKendraById$Params, context?: HttpContext): Observable<StrictHttpResponse<VigyanKendraDetailsRequestDto>> {
+    return getVigyanKendraById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getVigyanKendraById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getVigyanKendraById(params: GetVigyanKendraById$Params, context?: HttpContext): Observable<VigyanKendraDetailsRequestDto> {
+    return this.getVigyanKendraById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<VigyanKendraDetailsRequestDto>): VigyanKendraDetailsRequestDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getUsersByVigyanKendraId()` */
+  static readonly GetUsersByVigyanKendraIdPath = '/api/vigyan-kendra/users/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUsersByVigyanKendraId()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUsersByVigyanKendraId$Response(params: GetUsersByVigyanKendraId$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserDetails>>> {
+    return getUsersByVigyanKendraId(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUsersByVigyanKendraId$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUsersByVigyanKendraId(params: GetUsersByVigyanKendraId$Params, context?: HttpContext): Observable<Array<UserDetails>> {
+    return this.getUsersByVigyanKendraId$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<UserDetails>>): Array<UserDetails> => r.body)
     );
   }
 
-  /** Path part for operation `getSchoolsByCode()` */
-  static readonly GetSchoolsByCodePath = '/api/vigyan-kendra/schools/{id}';
+  /** Path part for operation `getSchoolsByVigyanKendraId()` */
+  static readonly GetSchoolsByVigyanKendraIdPath = '/api/vigyan-kendra/schools/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getSchoolsByCode()` instead.
+   * To access only the response body, use `getSchoolsByVigyanKendraId()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSchoolsByCode$Response(params: GetSchoolsByCode$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<SchoolDetailsResponseDto>>> {
-    return getSchoolsByCode(this.http, this.rootUrl, params, context);
+  getSchoolsByVigyanKendraId$Response(params: GetSchoolsByVigyanKendraId$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<SchoolDetailsResponseDto>>> {
+    return getSchoolsByVigyanKendraId(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getSchoolsByCode$Response()` instead.
+   * To access the full response (for headers, for example), `getSchoolsByVigyanKendraId$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSchoolsByCode(params: GetSchoolsByCode$Params, context?: HttpContext): Observable<Array<SchoolDetailsResponseDto>> {
-    return this.getSchoolsByCode$Response(params, context).pipe(
+  getSchoolsByVigyanKendraId(params: GetSchoolsByVigyanKendraId$Params, context?: HttpContext): Observable<Array<SchoolDetailsResponseDto>> {
+    return this.getSchoolsByVigyanKendraId$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<SchoolDetailsResponseDto>>): Array<SchoolDetailsResponseDto> => r.body)
     );
   }
 
-  /** Path part for operation `getByCode()` */
-  static readonly GetByCodePath = '/api/vigyan-kendra/code/{code}';
+  /** Path part for operation `getVigyanKendraByCode()` */
+  static readonly GetVigyanKendraByCodePath = '/api/vigyan-kendra/code/{code}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getByCode()` instead.
+   * To access only the response body, use `getVigyanKendraByCode()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getByCode$Response(params: GetByCode$Params, context?: HttpContext): Observable<StrictHttpResponse<VigyanKendraDetailsRequestDto>> {
-    return getByCode(this.http, this.rootUrl, params, context);
+  getVigyanKendraByCode$Response(params: GetVigyanKendraByCode$Params, context?: HttpContext): Observable<StrictHttpResponse<VigyanKendraDetailsRequestDto>> {
+    return getVigyanKendraByCode(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getByCode$Response()` instead.
+   * To access the full response (for headers, for example), `getVigyanKendraByCode$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getByCode(params: GetByCode$Params, context?: HttpContext): Observable<VigyanKendraDetailsRequestDto> {
-    return this.getByCode$Response(params, context).pipe(
+  getVigyanKendraByCode(params: GetVigyanKendraByCode$Params, context?: HttpContext): Observable<VigyanKendraDetailsRequestDto> {
+    return this.getVigyanKendraByCode$Response(params, context).pipe(
       map((r: StrictHttpResponse<VigyanKendraDetailsRequestDto>): VigyanKendraDetailsRequestDto => r.body)
     );
   }

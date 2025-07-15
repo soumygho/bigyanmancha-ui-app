@@ -13,11 +13,15 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { createStudent } from '../fn/student-enrollment-api/create-student';
 import { CreateStudent$Params } from '../fn/student-enrollment-api/create-student';
+import { deleteStudent } from '../fn/student-enrollment-api/delete-student';
+import { DeleteStudent$Params } from '../fn/student-enrollment-api/delete-student';
 import { getAllStudents } from '../fn/student-enrollment-api/get-all-students';
 import { GetAllStudents$Params } from '../fn/student-enrollment-api/get-all-students';
 import { getStudentById } from '../fn/student-enrollment-api/get-student-by-id';
 import { GetStudentById$Params } from '../fn/student-enrollment-api/get-student-by-id';
 import { StudentResponseDto } from '../models/student-response-dto';
+import { updateStudent } from '../fn/student-enrollment-api/update-student';
+import { UpdateStudent$Params } from '../fn/student-enrollment-api/update-student';
 
 @Injectable({ providedIn: 'root' })
 export class StudentEnrollmentApiService extends BaseService {
@@ -47,6 +51,31 @@ export class StudentEnrollmentApiService extends BaseService {
   getAllStudents(params?: GetAllStudents$Params, context?: HttpContext): Observable<Array<StudentResponseDto>> {
     return this.getAllStudents$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<StudentResponseDto>>): Array<StudentResponseDto> => r.body)
+    );
+  }
+
+  /** Path part for operation `updateStudent()` */
+  static readonly UpdateStudentPath = '/api/students';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateStudent()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateStudent$Response(params: UpdateStudent$Params, context?: HttpContext): Observable<StrictHttpResponse<StudentResponseDto>> {
+    return updateStudent(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateStudent$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateStudent(params: UpdateStudent$Params, context?: HttpContext): Observable<StudentResponseDto> {
+    return this.updateStudent$Response(params, context).pipe(
+      map((r: StrictHttpResponse<StudentResponseDto>): StudentResponseDto => r.body)
     );
   }
 
@@ -97,6 +126,31 @@ export class StudentEnrollmentApiService extends BaseService {
   getStudentById(params: GetStudentById$Params, context?: HttpContext): Observable<StudentResponseDto> {
     return this.getStudentById$Response(params, context).pipe(
       map((r: StrictHttpResponse<StudentResponseDto>): StudentResponseDto => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteStudent()` */
+  static readonly DeleteStudentPath = '/api/students/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteStudent()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteStudent$Response(params: DeleteStudent$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteStudent(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteStudent$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteStudent(params: DeleteStudent$Params, context?: HttpContext): Observable<void> {
+    return this.deleteStudent$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

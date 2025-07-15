@@ -4,7 +4,9 @@
 
 export interface SchoolDetailsRequestDto {
   examCentreId?: number;
+  examCentreName?: string;
   id?: number;
   name?: string;
   vigyanKendraId?: number;
+  vigyanKendraName?: string;
 }

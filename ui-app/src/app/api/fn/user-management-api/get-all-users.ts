@@ -8,22 +8,22 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserDetails } from '../../models/user-details';
+import { UserDetailsResponseDto } from '../../models/user-details-response-dto';
 
 export interface GetAllUsers$Params {
 }
 
-export function getAllUsers(http: HttpClient, rootUrl: string, params?: GetAllUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserDetails>>> {
+export function getAllUsers(http: HttpClient, rootUrl: string, params?: GetAllUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserDetailsResponseDto>>> {
   const rb = new RequestBuilder(rootUrl, getAllUsers.PATH, 'get');
   if (params) {
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<UserDetails>>;
+      return r as StrictHttpResponse<Array<UserDetailsResponseDto>>;
     })
   );
 }

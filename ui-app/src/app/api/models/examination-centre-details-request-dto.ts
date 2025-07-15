@@ -6,5 +6,9 @@ export interface ExaminationCentreDetailsRequestDto {
   id?: number;
   name?: string;
   schoolDetailsId?: number;
+  schoolName?: string;
+  schoolNames?: Array<string>;
+  vigyanKendraCode?: string;
   vigyanKendraId?: number;
+  vigyanKendraName?: string;
 }

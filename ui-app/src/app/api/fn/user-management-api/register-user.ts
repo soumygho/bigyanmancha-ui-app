@@ -9,25 +9,24 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { SignupRequest } from '../../models/signup-request';
+import { UserDetailsResponseDto } from '../../models/user-details-response-dto';
 
 export interface RegisterUser$Params {
       body: SignupRequest
 }
 
-export function registerUser(http: HttpClient, rootUrl: string, params: RegisterUser$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
+export function registerUser(http: HttpClient, rootUrl: string, params: RegisterUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetailsResponseDto>> {
   const rb = new RequestBuilder(rootUrl, registerUser.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<{
-      }>;
+      return r as StrictHttpResponse<UserDetailsResponseDto>;
     })
   );
 }

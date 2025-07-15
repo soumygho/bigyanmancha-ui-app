@@ -5,6 +5,7 @@
 export interface StudentRequestDto {
   id?: number;
   name?: string;
+  rollNumber?: number;
   schoolId?: number;
   sex?: string;
   studentClassId?: number;

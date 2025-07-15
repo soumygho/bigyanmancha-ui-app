@@ -11,17 +11,17 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { create } from '../fn/subject-details-api/create';
-import { Create$Params } from '../fn/subject-details-api/create';
-import { delete1 } from '../fn/subject-details-api/delete-1';
-import { Delete1$Params } from '../fn/subject-details-api/delete-1';
-import { getAll } from '../fn/subject-details-api/get-all';
-import { GetAll$Params } from '../fn/subject-details-api/get-all';
-import { getById2 } from '../fn/subject-details-api/get-by-id-2';
-import { GetById2$Params } from '../fn/subject-details-api/get-by-id-2';
+import { createSubject } from '../fn/subject-details-api/create-subject';
+import { CreateSubject$Params } from '../fn/subject-details-api/create-subject';
+import { deleteSubject } from '../fn/subject-details-api/delete-subject';
+import { DeleteSubject$Params } from '../fn/subject-details-api/delete-subject';
+import { getAllSubjects } from '../fn/subject-details-api/get-all-subjects';
+import { GetAllSubjects$Params } from '../fn/subject-details-api/get-all-subjects';
+import { getSubjectById } from '../fn/subject-details-api/get-subject-by-id';
+import { GetSubjectById$Params } from '../fn/subject-details-api/get-subject-by-id';
 import { SubjectDetailsResponseDto } from '../models/subject-details-response-dto';
-import { update } from '../fn/subject-details-api/update';
-import { Update$Params } from '../fn/subject-details-api/update';
+import { updateSubject } from '../fn/subject-details-api/update-subject';
+import { UpdateSubject$Params } from '../fn/subject-details-api/update-subject';
 
 @Injectable({ providedIn: 'root' })
 export class SubjectDetailsApiService extends BaseService {
@@ -29,127 +29,127 @@ export class SubjectDetailsApiService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `getAll()` */
-  static readonly GetAllPath = '/api/subject-details';
+  /** Path part for operation `getAllSubjects()` */
+  static readonly GetAllSubjectsPath = '/api/subject-details';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll()` instead.
+   * To access only the response body, use `getAllSubjects()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll$Response(params?: GetAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<SubjectDetailsResponseDto>>> {
-    return getAll(this.http, this.rootUrl, params, context);
+  getAllSubjects$Response(params?: GetAllSubjects$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<SubjectDetailsResponseDto>>> {
+    return getAllSubjects(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAll$Response()` instead.
+   * To access the full response (for headers, for example), `getAllSubjects$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll(params?: GetAll$Params, context?: HttpContext): Observable<Array<SubjectDetailsResponseDto>> {
-    return this.getAll$Response(params, context).pipe(
+  getAllSubjects(params?: GetAllSubjects$Params, context?: HttpContext): Observable<Array<SubjectDetailsResponseDto>> {
+    return this.getAllSubjects$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<SubjectDetailsResponseDto>>): Array<SubjectDetailsResponseDto> => r.body)
     );
   }
 
-  /** Path part for operation `update()` */
-  static readonly UpdatePath = '/api/subject-details';
+  /** Path part for operation `updateSubject()` */
+  static readonly UpdateSubjectPath = '/api/subject-details';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update()` instead.
+   * To access only the response body, use `updateSubject()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update$Response(params: Update$Params, context?: HttpContext): Observable<StrictHttpResponse<SubjectDetailsResponseDto>> {
-    return update(this.http, this.rootUrl, params, context);
+  updateSubject$Response(params: UpdateSubject$Params, context?: HttpContext): Observable<StrictHttpResponse<SubjectDetailsResponseDto>> {
+    return updateSubject(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `update$Response()` instead.
+   * To access the full response (for headers, for example), `updateSubject$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update(params: Update$Params, context?: HttpContext): Observable<SubjectDetailsResponseDto> {
-    return this.update$Response(params, context).pipe(
+  updateSubject(params: UpdateSubject$Params, context?: HttpContext): Observable<SubjectDetailsResponseDto> {
+    return this.updateSubject$Response(params, context).pipe(
       map((r: StrictHttpResponse<SubjectDetailsResponseDto>): SubjectDetailsResponseDto => r.body)
     );
   }
 
-  /** Path part for operation `create()` */
-  static readonly CreatePath = '/api/subject-details';
+  /** Path part for operation `createSubject()` */
+  static readonly CreateSubjectPath = '/api/subject-details';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create()` instead.
+   * To access only the response body, use `createSubject()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create$Response(params: Create$Params, context?: HttpContext): Observable<StrictHttpResponse<SubjectDetailsResponseDto>> {
-    return create(this.http, this.rootUrl, params, context);
+  createSubject$Response(params: CreateSubject$Params, context?: HttpContext): Observable<StrictHttpResponse<SubjectDetailsResponseDto>> {
+    return createSubject(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `create$Response()` instead.
+   * To access the full response (for headers, for example), `createSubject$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create(params: Create$Params, context?: HttpContext): Observable<SubjectDetailsResponseDto> {
-    return this.create$Response(params, context).pipe(
+  createSubject(params: CreateSubject$Params, context?: HttpContext): Observable<SubjectDetailsResponseDto> {
+    return this.createSubject$Response(params, context).pipe(
       map((r: StrictHttpResponse<SubjectDetailsResponseDto>): SubjectDetailsResponseDto => r.body)
     );
   }
 
-  /** Path part for operation `getById2()` */
-  static readonly GetById2Path = '/api/subject-details/{id}';
+  /** Path part for operation `getSubjectById()` */
+  static readonly GetSubjectByIdPath = '/api/subject-details/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById2()` instead.
+   * To access only the response body, use `getSubjectById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById2$Response(params: GetById2$Params, context?: HttpContext): Observable<StrictHttpResponse<SubjectDetailsResponseDto>> {
-    return getById2(this.http, this.rootUrl, params, context);
+  getSubjectById$Response(params: GetSubjectById$Params, context?: HttpContext): Observable<StrictHttpResponse<SubjectDetailsResponseDto>> {
+    return getSubjectById(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getById2$Response()` instead.
+   * To access the full response (for headers, for example), `getSubjectById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById2(params: GetById2$Params, context?: HttpContext): Observable<SubjectDetailsResponseDto> {
-    return this.getById2$Response(params, context).pipe(
+  getSubjectById(params: GetSubjectById$Params, context?: HttpContext): Observable<SubjectDetailsResponseDto> {
+    return this.getSubjectById$Response(params, context).pipe(
       map((r: StrictHttpResponse<SubjectDetailsResponseDto>): SubjectDetailsResponseDto => r.body)
     );
   }
 
-  /** Path part for operation `delete1()` */
-  static readonly Delete1Path = '/api/subject-details/{id}';
+  /** Path part for operation `deleteSubject()` */
+  static readonly DeleteSubjectPath = '/api/subject-details/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete1()` instead.
+   * To access only the response body, use `deleteSubject()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete1$Response(params: Delete1$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return delete1(this.http, this.rootUrl, params, context);
+  deleteSubject$Response(params: DeleteSubject$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteSubject(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete1$Response()` instead.
+   * To access the full response (for headers, for example), `deleteSubject$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete1(params: Delete1$Params, context?: HttpContext): Observable<void> {
-    return this.delete1$Response(params, context).pipe(
+  deleteSubject(params: DeleteSubject$Params, context?: HttpContext): Observable<void> {
+    return this.deleteSubject$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }

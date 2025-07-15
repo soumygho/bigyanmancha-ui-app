@@ -8,26 +8,25 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { JwtResponse } from '../../models/jwt-response';
 import { LoginRequest } from '../../models/login-request';
 
 export interface AuthenticateUser$Params {
       body: LoginRequest
 }
 
-export function authenticateUser(http: HttpClient, rootUrl: string, params: AuthenticateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
+export function authenticateUser(http: HttpClient, rootUrl: string, params: AuthenticateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<JwtResponse>> {
   const rb = new RequestBuilder(rootUrl, authenticateUser.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<{
-      }>;
+      return r as StrictHttpResponse<JwtResponse>;
     })
   );
 }

@@ -11,17 +11,21 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { create3 } from '../fn/examination-centre-details-api/create-3';
-import { Create3$Params } from '../fn/examination-centre-details-api/create-3';
-import { delete$ } from '../fn/examination-centre-details-api/delete';
-import { Delete$Params } from '../fn/examination-centre-details-api/delete';
+import { assignSchool } from '../fn/examination-centre-details-api/assign-school';
+import { AssignSchool$Params } from '../fn/examination-centre-details-api/assign-school';
+import { createExamCenter } from '../fn/examination-centre-details-api/create-exam-center';
+import { CreateExamCenter$Params } from '../fn/examination-centre-details-api/create-exam-center';
+import { deAssignSchool } from '../fn/examination-centre-details-api/de-assign-school';
+import { DeAssignSchool$Params } from '../fn/examination-centre-details-api/de-assign-school';
+import { deleteExamCenter } from '../fn/examination-centre-details-api/delete-exam-center';
+import { DeleteExamCenter$Params } from '../fn/examination-centre-details-api/delete-exam-center';
 import { ExaminationCentreDetailsRequestDto } from '../models/examination-centre-details-request-dto';
-import { getAll4 } from '../fn/examination-centre-details-api/get-all-4';
-import { GetAll4$Params } from '../fn/examination-centre-details-api/get-all-4';
-import { getById } from '../fn/examination-centre-details-api/get-by-id';
-import { GetById$Params } from '../fn/examination-centre-details-api/get-by-id';
-import { update2 } from '../fn/examination-centre-details-api/update-2';
-import { Update2$Params } from '../fn/examination-centre-details-api/update-2';
+import { getAllExamCenters } from '../fn/examination-centre-details-api/get-all-exam-centers';
+import { GetAllExamCenters$Params } from '../fn/examination-centre-details-api/get-all-exam-centers';
+import { getExamCenterById } from '../fn/examination-centre-details-api/get-exam-center-by-id';
+import { GetExamCenterById$Params } from '../fn/examination-centre-details-api/get-exam-center-by-id';
+import { updateExamCenter } from '../fn/examination-centre-details-api/update-exam-center';
+import { UpdateExamCenter$Params } from '../fn/examination-centre-details-api/update-exam-center';
 
 @Injectable({ providedIn: 'root' })
 export class ExaminationCentreDetailsApiService extends BaseService {
@@ -29,128 +33,178 @@ export class ExaminationCentreDetailsApiService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `getById()` */
-  static readonly GetByIdPath = '/api/examination-centres/{id}';
+  /** Path part for operation `getAllExamCenters()` */
+  static readonly GetAllExamCentersPath = '/api/examination-centres';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById()` instead.
+   * To access only the response body, use `getAllExamCenters()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById$Response(params: GetById$Params, context?: HttpContext): Observable<StrictHttpResponse<ExaminationCentreDetailsRequestDto>> {
-    return getById(this.http, this.rootUrl, params, context);
+  getAllExamCenters$Response(params?: GetAllExamCenters$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExaminationCentreDetailsRequestDto>>> {
+    return getAllExamCenters(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getById$Response()` instead.
+   * To access the full response (for headers, for example), `getAllExamCenters$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById(params: GetById$Params, context?: HttpContext): Observable<ExaminationCentreDetailsRequestDto> {
-    return this.getById$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ExaminationCentreDetailsRequestDto>): ExaminationCentreDetailsRequestDto => r.body)
-    );
-  }
-
-  /** Path part for operation `update2()` */
-  static readonly Update2Path = '/api/examination-centres/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update2()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  update2$Response(params: Update2$Params, context?: HttpContext): Observable<StrictHttpResponse<ExaminationCentreDetailsRequestDto>> {
-    return update2(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `update2$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  update2(params: Update2$Params, context?: HttpContext): Observable<ExaminationCentreDetailsRequestDto> {
-    return this.update2$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ExaminationCentreDetailsRequestDto>): ExaminationCentreDetailsRequestDto => r.body)
-    );
-  }
-
-  /** Path part for operation `delete()` */
-  static readonly DeletePath = '/api/examination-centres/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete$Response(params: Delete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return delete$(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete(params: Delete$Params, context?: HttpContext): Observable<void> {
-    return this.delete$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `getAll4()` */
-  static readonly GetAll4Path = '/api/examination-centres';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll4()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAll4$Response(params?: GetAll4$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExaminationCentreDetailsRequestDto>>> {
-    return getAll4(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAll4$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAll4(params?: GetAll4$Params, context?: HttpContext): Observable<Array<ExaminationCentreDetailsRequestDto>> {
-    return this.getAll4$Response(params, context).pipe(
+  getAllExamCenters(params?: GetAllExamCenters$Params, context?: HttpContext): Observable<Array<ExaminationCentreDetailsRequestDto>> {
+    return this.getAllExamCenters$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<ExaminationCentreDetailsRequestDto>>): Array<ExaminationCentreDetailsRequestDto> => r.body)
     );
   }
 
-  /** Path part for operation `create3()` */
-  static readonly Create3Path = '/api/examination-centres';
+  /** Path part for operation `updateExamCenter()` */
+  static readonly UpdateExamCenterPath = '/api/examination-centres';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create3()` instead.
+   * To access only the response body, use `updateExamCenter()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create3$Response(params: Create3$Params, context?: HttpContext): Observable<StrictHttpResponse<ExaminationCentreDetailsRequestDto>> {
-    return create3(this.http, this.rootUrl, params, context);
+  updateExamCenter$Response(params: UpdateExamCenter$Params, context?: HttpContext): Observable<StrictHttpResponse<ExaminationCentreDetailsRequestDto>> {
+    return updateExamCenter(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `create3$Response()` instead.
+   * To access the full response (for headers, for example), `updateExamCenter$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create3(params: Create3$Params, context?: HttpContext): Observable<ExaminationCentreDetailsRequestDto> {
-    return this.create3$Response(params, context).pipe(
+  updateExamCenter(params: UpdateExamCenter$Params, context?: HttpContext): Observable<ExaminationCentreDetailsRequestDto> {
+    return this.updateExamCenter$Response(params, context).pipe(
       map((r: StrictHttpResponse<ExaminationCentreDetailsRequestDto>): ExaminationCentreDetailsRequestDto => r.body)
+    );
+  }
+
+  /** Path part for operation `createExamCenter()` */
+  static readonly CreateExamCenterPath = '/api/examination-centres';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createExamCenter()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createExamCenter$Response(params: CreateExamCenter$Params, context?: HttpContext): Observable<StrictHttpResponse<ExaminationCentreDetailsRequestDto>> {
+    return createExamCenter(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createExamCenter$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createExamCenter(params: CreateExamCenter$Params, context?: HttpContext): Observable<ExaminationCentreDetailsRequestDto> {
+    return this.createExamCenter$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ExaminationCentreDetailsRequestDto>): ExaminationCentreDetailsRequestDto => r.body)
+    );
+  }
+
+  /** Path part for operation `deAssignSchool()` */
+  static readonly DeAssignSchoolPath = '/api/examination-centres/de-assign';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deAssignSchool()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  deAssignSchool$Response(params: DeAssignSchool$Params, context?: HttpContext): Observable<StrictHttpResponse<ExaminationCentreDetailsRequestDto>> {
+    return deAssignSchool(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deAssignSchool$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  deAssignSchool(params: DeAssignSchool$Params, context?: HttpContext): Observable<ExaminationCentreDetailsRequestDto> {
+    return this.deAssignSchool$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ExaminationCentreDetailsRequestDto>): ExaminationCentreDetailsRequestDto => r.body)
+    );
+  }
+
+  /** Path part for operation `assignSchool()` */
+  static readonly AssignSchoolPath = '/api/examination-centres/assign';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `assignSchool()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  assignSchool$Response(params: AssignSchool$Params, context?: HttpContext): Observable<StrictHttpResponse<ExaminationCentreDetailsRequestDto>> {
+    return assignSchool(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `assignSchool$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  assignSchool(params: AssignSchool$Params, context?: HttpContext): Observable<ExaminationCentreDetailsRequestDto> {
+    return this.assignSchool$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ExaminationCentreDetailsRequestDto>): ExaminationCentreDetailsRequestDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getExamCenterById()` */
+  static readonly GetExamCenterByIdPath = '/api/examination-centres/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getExamCenterById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getExamCenterById$Response(params: GetExamCenterById$Params, context?: HttpContext): Observable<StrictHttpResponse<ExaminationCentreDetailsRequestDto>> {
+    return getExamCenterById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getExamCenterById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getExamCenterById(params: GetExamCenterById$Params, context?: HttpContext): Observable<ExaminationCentreDetailsRequestDto> {
+    return this.getExamCenterById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ExaminationCentreDetailsRequestDto>): ExaminationCentreDetailsRequestDto => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteExamCenter()` */
+  static readonly DeleteExamCenterPath = '/api/examination-centres/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteExamCenter()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteExamCenter$Response(params: DeleteExamCenter$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteExamCenter(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteExamCenter$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteExamCenter(params: DeleteExamCenter$Params, context?: HttpContext): Observable<void> {
+    return this.deleteExamCenter$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

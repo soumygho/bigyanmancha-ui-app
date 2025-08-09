@@ -9,12 +9,13 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { SchoolDetailsRequestDto } from '../../models/school-details-request-dto';
+import { SchoolDetailsResponseDto } from '../../models/school-details-response-dto';
 
 export interface CreateSchool$Params {
       body: SchoolDetailsRequestDto
 }
 
-export function createSchool(http: HttpClient, rootUrl: string, params: CreateSchool$Params, context?: HttpContext): Observable<StrictHttpResponse<SchoolDetailsRequestDto>> {
+export function createSchool(http: HttpClient, rootUrl: string, params: CreateSchool$Params, context?: HttpContext): Observable<StrictHttpResponse<SchoolDetailsResponseDto>> {
   const rb = new RequestBuilder(rootUrl, createSchool.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
@@ -25,7 +26,7 @@ export function createSchool(http: HttpClient, rootUrl: string, params: CreateSc
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SchoolDetailsRequestDto>;
+      return r as StrictHttpResponse<SchoolDetailsResponseDto>;
     })
   );
 }

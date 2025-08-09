@@ -4,7 +4,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   ExaminationCentreDetailsRequestDto,
   SchoolDetailsRequestDto,
-  SchoolDetailsResponseDto,
   VigyanKendraDetails,
 } from '../../../api/models';
 import { MatCommonModule } from '@angular/material/core';

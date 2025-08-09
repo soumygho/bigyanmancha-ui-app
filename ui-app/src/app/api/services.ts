@@ -9,5 +9,8 @@ export { StudentEnrollmentApiService } from './services/student-enrollment-api.s
 export { StudentClassApiService } from './services/student-class-api.service';
 export { SchoolDetailsApiService } from './services/school-details-api.service';
 export { ExaminationCentreDetailsApiService } from './services/examination-centre-details-api.service';
+export { EnrollmentSessionManagementApiService } from './services/enrollment-session-management-api.service';
 export { StudentMarksApiService } from './services/student-marks-api.service';
+export { ReportingApiService } from './services/reporting-api.service';
 export { AuthApiService } from './services/auth-api.service';
+export { HelloApiService } from './services/hello-api.service';

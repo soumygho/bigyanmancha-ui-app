@@ -75,6 +75,12 @@ export class StudentEnrollmentFormComponent implements OnInit {
       class: [this.rowData?.classId ?? '', Validators.required],
     });
     this.setFilteredSchools(this.rowData?.vigyanKendraId);
+    if(!this.isEdit) {
+      const rollText = this.form?.get('roll');
+      rollText?.patchValue('NA');
+      const numberText = this.form?.get('number');
+      numberText?.patchValue('NA');
+    }
   }
 
   save() {

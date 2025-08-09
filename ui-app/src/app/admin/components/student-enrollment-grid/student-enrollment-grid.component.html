@@ -27,11 +27,30 @@
     </mat-select>
   </mat-form-field>
 
+  <button
+    mat-raised-button
+    color="primary"
+    matTooltip="Get by Vigyan Kendra"
+    (click)="getByVigyanKendra()"
+    aria-label="Get By VigyanKendra"
+    *ngIf="this.userLoggedInState()?.isAdminUser"
+  >
+    Get By Vigyan Kendra
+  </button>
+
   <mat-form-field appearance="outline" class="filter">
     <mat-label>Filter School</mat-label>
     <mat-select (selectionChange)="setSchoolFilter($event)">
       <mat-option *ngFor="let school of filteredSchool()" [value]="school.id">
         {{ school.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="filter">
+    <mat-label>Filter Class</mat-label>
+    <mat-select (selectionChange)="setClassFilter($event)">
+      <mat-option *ngFor="let classDetails of studentClassDetailsList()" [value]="classDetails.id">
+        {{ classDetails.name }}
       </mat-option>
     </mat-select>
   </mat-form-field>

@@ -5,6 +5,8 @@
 export interface StudentResponseDto {
   classId?: number;
   className?: string;
+  enrollmentId?: number;
+  enrollmentYear?: number;
   examinationCentreId?: number;
   examinationCentreName?: string;
   id?: number;

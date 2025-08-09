@@ -2,8 +2,8 @@ import { Component, Inject, OnInit, signal } from '@angular/core';
 import { Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
-  ExaminationCentreDetailsRequestDto,
   SchoolDetailsResponseDto,
+  ExaminationCentreDetailsRequestDto,
   VigyanKendraDetails,
 } from '../../../api/models';
 import { MatCommonModule } from '@angular/material/core';

@@ -63,7 +63,6 @@ export class VigyanKendraGridComponent implements OnInit, OnDestroy {
 
   // ─── AG Grid setup ─────────────────────────────────────────────────────────
   columnDefs: ColDef[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
     { field: 'name', headerName: 'Name', flex: 1 },
     { field: 'code', headerName: 'Code', flex: 1 },
     {

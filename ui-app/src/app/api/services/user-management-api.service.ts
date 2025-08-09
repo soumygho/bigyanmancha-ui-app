@@ -29,6 +29,81 @@ export class UserManagementApiService extends BaseService {
     super(config, http);
   }
 
+  /** Path part for operation `getAllUsers()` */
+  static readonly GetAllUsersPath = '/api/users';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllUsers()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllUsers$Response(params?: GetAllUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserDetailsResponseDto>>> {
+    return getAllUsers(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllUsers$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllUsers(params?: GetAllUsers$Params, context?: HttpContext): Observable<Array<UserDetailsResponseDto>> {
+    return this.getAllUsers$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<UserDetailsResponseDto>>): Array<UserDetailsResponseDto> => r.body)
+    );
+  }
+
+  /** Path part for operation `updateUser()` */
+  static readonly UpdateUserPath = '/api/users';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateUser()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateUser$Response(params: UpdateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetailsResponseDto>> {
+    return updateUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateUser$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateUser(params: UpdateUser$Params, context?: HttpContext): Observable<UserDetailsResponseDto> {
+    return this.updateUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserDetailsResponseDto>): UserDetailsResponseDto => r.body)
+    );
+  }
+
+  /** Path part for operation `registerUser()` */
+  static readonly RegisterUserPath = '/api/users';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `registerUser()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  registerUser$Response(params: RegisterUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetailsResponseDto>> {
+    return registerUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `registerUser$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  registerUser(params: RegisterUser$Params, context?: HttpContext): Observable<UserDetailsResponseDto> {
+    return this.registerUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserDetailsResponseDto>): UserDetailsResponseDto => r.body)
+    );
+  }
+
   /** Path part for operation `getUser()` */
   static readonly GetUserPath = '/api/users/{id}';
 
@@ -50,31 +125,6 @@ export class UserManagementApiService extends BaseService {
    */
   getUser(params: GetUser$Params, context?: HttpContext): Observable<UserDetailsResponseDto> {
     return this.getUser$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UserDetailsResponseDto>): UserDetailsResponseDto => r.body)
-    );
-  }
-
-  /** Path part for operation `updateUser()` */
-  static readonly UpdateUserPath = '/api/users/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateUser()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateUser$Response(params: UpdateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetailsResponseDto>> {
-    return updateUser(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `updateUser$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateUser(params: UpdateUser$Params, context?: HttpContext): Observable<UserDetailsResponseDto> {
-    return this.updateUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<UserDetailsResponseDto>): UserDetailsResponseDto => r.body)
     );
   }
@@ -101,56 +151,6 @@ export class UserManagementApiService extends BaseService {
   deleteUser(params: DeleteUser$Params, context?: HttpContext): Observable<void> {
     return this.deleteUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `getAllUsers()` */
-  static readonly GetAllUsersPath = '/api/users';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAllUsers()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAllUsers$Response(params?: GetAllUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserDetailsResponseDto>>> {
-    return getAllUsers(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAllUsers$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAllUsers(params?: GetAllUsers$Params, context?: HttpContext): Observable<Array<UserDetailsResponseDto>> {
-    return this.getAllUsers$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<UserDetailsResponseDto>>): Array<UserDetailsResponseDto> => r.body)
-    );
-  }
-
-  /** Path part for operation `registerUser()` */
-  static readonly RegisterUserPath = '/api/users';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `registerUser()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  registerUser$Response(params: RegisterUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDetailsResponseDto>> {
-    return registerUser(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `registerUser$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  registerUser(params: RegisterUser$Params, context?: HttpContext): Observable<UserDetailsResponseDto> {
-    return this.registerUser$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UserDetailsResponseDto>): UserDetailsResponseDto => r.body)
     );
   }
 

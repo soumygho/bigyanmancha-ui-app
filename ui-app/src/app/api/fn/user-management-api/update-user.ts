@@ -31,4 +31,4 @@ export function updateUser(http: HttpClient, rootUrl: string, params: UpdateUser
   );
 }
 
-updateUser.PATH = '/api/users/{id}';
+updateUser.PATH = '/api/users';

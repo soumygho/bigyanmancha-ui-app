@@ -11,6 +11,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { jwtDecode } from 'jwt-decode';
+import { AdminAuthService } from '../../services/admin-auth.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-admin-login-form',
@@ -35,10 +38,15 @@ export class AdminLoginFormComponent implements OnInit {
   private readonly globalStateManagerService = inject(StateManagerService);
   private readonly authApi = inject(AuthApiService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly authService = inject(AdminAuthService);
+  private readonly notficationService = inject(NotificationService);
 
   form: any;
 
   ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/admin/landing-page']);
+    }
     this.form = this.formBuilder.group({
       userName: ['', Validators.required],
       password: ['', Validators.required],
@@ -46,13 +54,15 @@ export class AdminLoginFormComponent implements OnInit {
   }
 
   handleLogin() {
-    this.authApi.authenticateUser({body: this.form.value}).subscribe(resp => {
-      console.trace(resp);
-      //set the token into local storage
-      //need to call auth api and mutate global state
-      this.globalStateManagerService.mutateLoggedInUserState(resp, true);
-      console.trace(this.globalStateManagerService.getLoggedInUserState());
-      this.router.navigate(['/admin/landing-page']);
+    this.authApi.authenticateUser({ body: this.form.value }).subscribe({
+      next: (resp) => {
+        this.globalStateManagerService.mutateLoggedInUserState(resp, true);
+        this.authService.login(resp?.jwt!);
+        this.router.navigate(['/admin/landing-page']);
+      },
+      error: (err) => {
+        this.notficationService.show('Login failed, Please try again with valid credentials!');
+      }
     });
   }
 }

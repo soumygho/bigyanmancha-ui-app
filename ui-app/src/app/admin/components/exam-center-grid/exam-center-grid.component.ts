@@ -26,11 +26,8 @@ import {
   SchoolDetailsApiService,
 } from '../../../api/services';
 import {
-  ExaminationCentreDetails,
   ExaminationCentreDetailsRequestDto,
-  SchoolDetails,
   SchoolDetailsResponseDto,
-  StudentResponseDto,
   VigyanKendraDetails,
 } from '../../../api/models';
 import { StateManagerService } from '../../services/state-manager.service';
@@ -105,7 +102,6 @@ export class ExamCenterGridComponent {
 
   // ─── AG Grid setup ─────────────────────────────────────────────────────────
   columnDefs: ColDef<ExaminationCentreDetailsRequestDto>[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
     { field: 'name', headerName: 'Name', flex: 1 },
     {
       field: 'vigyanKendraName',

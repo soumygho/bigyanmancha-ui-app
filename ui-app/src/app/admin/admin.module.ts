@@ -11,30 +11,80 @@ import { AdminStudentClassPageComponent } from './pages/admin-student-class-page
 import { AdminStudentSubjectPageComponent } from './pages/admin-student-subject-page/admin-student-subject-page.component';
 import { AdminExamCenterPageComponent } from './pages/admin-exam-center-page/admin-exam-center-page.component';
 import { AdminLandingPageComponent } from './pages/admin-landing-page/admin-landing-page.component';
+import { AdminEnrollmentSessionPageComponent } from './pages/admin-enrollment-session-page/admin-enrollment-session-page.component';
+import { AdminUnauthorizedPageComponent } from './pages/admin-unauthorized-page/admin-unauthorized-page.component';
+import { adminPermissionGuard } from './guards/admin-auth.guard';
+import { adminOrVigyanKendraPermissionGuard } from './guards/adminorvigyankendra-auth.guard';
+import { AdminReportingPageComponent } from './pages/admin-reporting-page/admin-reporting-page.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminLayoutPageComponent,
     children: [
-      { path: '', component: AdminLoginPageComponent },   // /admin
-      { path: 'users', component: AdminUsersPageComponent },   // /admin/users
-      { path: 'vigyan-kendra', component:  AdminVigyanKendraPageComponent}, // /admin/settings
-      { path: 'student', component: AdminStudentPageComponent},
-      {path: 'school', component: AdminSchoolPageComponent},
-      {path: 'student-class', component: AdminStudentClassPageComponent},
-      {path: 'student-subjects', component: AdminStudentSubjectPageComponent},
-      {path: 'exam-center', component: AdminExamCenterPageComponent},
-      {path: 'landing-page', component: AdminLandingPageComponent},
-      {path: '**', redirectTo: 'landing-page'},
+      { path: '', component: AdminLoginPageComponent }, // /admin
+      { path: 'login', component: AdminLoginPageComponent },
+      {
+        path: 'users',
+        component: AdminUsersPageComponent,
+        canActivate: [adminPermissionGuard()],
+      },
+      {
+        path: 'vigyan-kendra',
+        component: AdminVigyanKendraPageComponent,
+        canActivate: [adminPermissionGuard()],
+      },
+      {
+        path: 'student',
+        component: AdminStudentPageComponent,
+        canActivate: [adminOrVigyanKendraPermissionGuard()],
+      },
+      {
+        path: 'school',
+        component: AdminSchoolPageComponent,
+        canActivate: [adminOrVigyanKendraPermissionGuard()],
+      },
+      {
+        path: 'student-class',
+        component: AdminStudentClassPageComponent,
+        canActivate: [adminPermissionGuard()],
+      },
+      {
+        path: 'student-subjects',
+        component: AdminStudentSubjectPageComponent,
+        canActivate: [adminPermissionGuard()],
+      },
+      {
+        path: 'exam-center',
+        component: AdminExamCenterPageComponent,
+        canActivate: [adminOrVigyanKendraPermissionGuard()],
+      },
+      {
+        path: 'landing-page',
+        component: AdminLandingPageComponent,
+        canActivate: [adminOrVigyanKendraPermissionGuard()],
+      },
+      {
+        path: 'unauthorized',
+        component: AdminUnauthorizedPageComponent,
+      },
+      {
+        path: 'enrollment-session',
+        component: AdminEnrollmentSessionPageComponent,
+        canActivate: [adminPermissionGuard()],
+      },
+      {
+        path: 'reporting',
+        component: AdminReportingPageComponent,
+        canActivate: [adminOrVigyanKendraPermissionGuard()],
+      },
+      { path: '**', redirectTo: 'landing-page' },
     ],
   },
 ];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)],
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
 export class AdminModule {}

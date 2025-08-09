@@ -31,6 +31,8 @@ import {
 import { StudentEnrollmentFormComponent } from '../student-enrollment-form/student-enrollment-form.component';
 import { StateManagerService } from '../../services/state-manager.service';
 import dialogConfig from '../../imports/grid-config';
+import { LoggedInUserState } from '../../imports/app-state-import';
+import { NotificationService } from '../../services/notification.service';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -52,36 +54,38 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   private readonly enrollmentService = inject(StudentEnrollmentApiService);
   private dialog: MatDialog = inject(MatDialog);
-
   private readonly globalStateManagerService: StateManagerService =
     inject(StateManagerService);
+  private readonly notficationService = inject(NotificationService);
 
   private readonly dialogConfig = dialogConfig;
   //local state
   readonly data = signal<StudentResponseDto[]>([]);
   readonly vigyanKendraFilter = signal<undefined | null | number>(undefined);
   readonly schoolFilter = signal<undefined | null | string>(undefined);
+  readonly classFilter = signal<undefined | null | string>(undefined);
   readonly vigyanKendraList = signal<VigyanKendraDetails[]>([]);
   readonly schoolDetailsList = signal<SchoolDetailsResponseDto[]>([]);
   readonly studentClassDetailsList = signal<StudentClassDetailsResponseDto[]>(
     []
   );
+  readonly userLoggedInState = signal<LoggedInUserState | undefined>(undefined);
   readonly filteredItems = computed(() => {
-    let filteredData = [];
-    if (this.vigyanKendraFilter() && this.schoolFilter()) {
-      filteredData = this.data()
-        .filter((i) => i.vigyanKendraId === this.vigyanKendraFilter())
-        .filter((i) => i.schoolId === this.schoolFilter());
-    } else if (this.vigyanKendraFilter()) {
+    let filteredData = this.data();
+    if (this.vigyanKendraFilter()) {
       filteredData = this.data().filter(
         (i) => i.vigyanKendraId === this.vigyanKendraFilter()
       );
-    } else if (this.schoolFilter()) {
+    }
+    if (this.schoolFilter()) {
       filteredData = this.data().filter(
         (i) => i.schoolId === this.schoolFilter()
       );
-    } else {
-      filteredData = this.data();
+    }
+    if (this.classFilter()) {
+      filteredData = this.data().filter(
+        (i) => i.classId === this.classFilter()
+      );
     }
     filteredData = filteredData ?? [];
     return filteredData;
@@ -99,14 +103,15 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   });
 
   // ─── AG Grid setup ─────────────────────────────────────────────────────────
-  columnDefs: ColDef[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
+  columnDefs: ColDef<StudentResponseDto>[] = [
     { field: 'name', headerName: 'Name', flex: 1 },
+    { field: 'className', headerName: 'Class', flex: 1 },
     { field: 'roll', headerName: 'Roll', flex: 1 },
     { field: 'number', headerName: 'Number', flex: 1 },
     { field: 'schoolName', headerName: 'School', flex: 1 },
     { field: 'sex', headerName: 'Sex', flex: 1 },
     { field: 'vigyanKendraName', headerName: 'Vigyan Kendra', flex: 1 },
+    { field: 'examinationCentreName', headerName: 'Exam Center', flex: 1 },
     {
       headerName: 'Actions',
       width: 140,
@@ -124,7 +129,6 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
     effect(
       () => {
         let state = this.globalStateManagerService.globalState();
-        console.trace(state);
         if (state && state.vigyanKendras) {
           this.vigyanKendraList.set(state.vigyanKendras);
         }
@@ -145,12 +149,13 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    let loginState = this.globalStateManagerService.getLoggedInUserState();
+    this.userLoggedInState.set(loginState);
     this.loadConfigData();
     this.loadData();
   }
 
   onGridReady(e: GridReadyEvent) {
-    console.trace('grid is ready!');
     this.gridApi = e.api;
   }
 
@@ -159,10 +164,21 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.enrollmentService.getAllStudents().subscribe((response) => {
-      console.trace(response);
-      this.data.set(response);
-    });
+    if (this.userLoggedInState()?.isAdminUser) {
+      if (this.vigyanKendraFilter()) {
+        this.enrollmentService
+          .getAllStudentsByVigyanKendraId({ id: this.vigyanKendraFilter()! })
+          .subscribe((response) => {
+            this.data.set(response);
+          });
+      } else {
+        this.notficationService.show('Please select a vigyan kendra to query.');
+      }
+    } else {
+      this.enrollmentService.getAllStudents().subscribe((response) => {
+        this.data.set(response);
+      });
+    }
   }
 
   create() {
@@ -189,7 +205,10 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
         };
         this.enrollmentService
           .createStudent({ body: request })
-          .subscribe(() => this.loadData());
+          .subscribe((studentResponse) => {
+            let studentList = this.data();
+            this.data.set([...studentList, studentResponse]);
+          });
       });
   }
 
@@ -220,7 +239,13 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
         };
         this.enrollmentService
           .updateStudent({ body: request })
-          .subscribe(() => this.loadData());
+          .subscribe((studentResponse) => {
+            let studentList = this.data();
+            studentList = studentList.filter(
+              (student) => student.id !== studentResponse.id
+            );
+            this.data.set([...studentList, studentResponse]);
+          });
       });
   }
 
@@ -250,9 +275,21 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
     this.schoolFilter.set(value);
   }
 
+  setClassFilter(event: any) {
+    const value = event.value;
+    this.classFilter.set(value);
+  }
+
   onRefresh() {
-    this.schoolFilter.set(undefined);
-    this.vigyanKendraFilter.set(undefined);
+    if (!this.userLoggedInState()?.isAdminUser) {
+      this.schoolFilter.set(undefined);
+      this.vigyanKendraFilter.set(undefined);
+      this.classFilter.set(undefined);
+    }
+    this.loadData();
+  }
+
+  getByVigyanKendra() {
     this.loadData();
   }
 }

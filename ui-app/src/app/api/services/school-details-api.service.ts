@@ -19,7 +19,9 @@ import { getAllSchools } from '../fn/school-details-api/get-all-schools';
 import { GetAllSchools$Params } from '../fn/school-details-api/get-all-schools';
 import { getSchoolById } from '../fn/school-details-api/get-school-by-id';
 import { GetSchoolById$Params } from '../fn/school-details-api/get-school-by-id';
-import { SchoolDetailsRequestDto } from '../models/school-details-request-dto';
+import { removeExamCenter } from '../fn/school-details-api/remove-exam-center';
+import { RemoveExamCenter$Params } from '../fn/school-details-api/remove-exam-center';
+import { SchoolDetailsResponseDto } from '../models/school-details-response-dto';
 import { updateSchool } from '../fn/school-details-api/update-school';
 import { UpdateSchool$Params } from '../fn/school-details-api/update-school';
 
@@ -38,7 +40,7 @@ export class SchoolDetailsApiService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllSchools$Response(params?: GetAllSchools$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<SchoolDetailsRequestDto>>> {
+  getAllSchools$Response(params?: GetAllSchools$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<SchoolDetailsResponseDto>>> {
     return getAllSchools(this.http, this.rootUrl, params, context);
   }
 
@@ -48,9 +50,9 @@ export class SchoolDetailsApiService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllSchools(params?: GetAllSchools$Params, context?: HttpContext): Observable<Array<SchoolDetailsRequestDto>> {
+  getAllSchools(params?: GetAllSchools$Params, context?: HttpContext): Observable<Array<SchoolDetailsResponseDto>> {
     return this.getAllSchools$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<SchoolDetailsRequestDto>>): Array<SchoolDetailsRequestDto> => r.body)
+      map((r: StrictHttpResponse<Array<SchoolDetailsResponseDto>>): Array<SchoolDetailsResponseDto> => r.body)
     );
   }
 
@@ -63,7 +65,7 @@ export class SchoolDetailsApiService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateSchool$Response(params: UpdateSchool$Params, context?: HttpContext): Observable<StrictHttpResponse<SchoolDetailsRequestDto>> {
+  updateSchool$Response(params: UpdateSchool$Params, context?: HttpContext): Observable<StrictHttpResponse<SchoolDetailsResponseDto>> {
     return updateSchool(this.http, this.rootUrl, params, context);
   }
 
@@ -73,9 +75,9 @@ export class SchoolDetailsApiService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateSchool(params: UpdateSchool$Params, context?: HttpContext): Observable<SchoolDetailsRequestDto> {
+  updateSchool(params: UpdateSchool$Params, context?: HttpContext): Observable<SchoolDetailsResponseDto> {
     return this.updateSchool$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SchoolDetailsRequestDto>): SchoolDetailsRequestDto => r.body)
+      map((r: StrictHttpResponse<SchoolDetailsResponseDto>): SchoolDetailsResponseDto => r.body)
     );
   }
 
@@ -88,7 +90,7 @@ export class SchoolDetailsApiService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createSchool$Response(params: CreateSchool$Params, context?: HttpContext): Observable<StrictHttpResponse<SchoolDetailsRequestDto>> {
+  createSchool$Response(params: CreateSchool$Params, context?: HttpContext): Observable<StrictHttpResponse<SchoolDetailsResponseDto>> {
     return createSchool(this.http, this.rootUrl, params, context);
   }
 
@@ -98,9 +100,9 @@ export class SchoolDetailsApiService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createSchool(params: CreateSchool$Params, context?: HttpContext): Observable<SchoolDetailsRequestDto> {
+  createSchool(params: CreateSchool$Params, context?: HttpContext): Observable<SchoolDetailsResponseDto> {
     return this.createSchool$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SchoolDetailsRequestDto>): SchoolDetailsRequestDto => r.body)
+      map((r: StrictHttpResponse<SchoolDetailsResponseDto>): SchoolDetailsResponseDto => r.body)
     );
   }
 
@@ -138,7 +140,7 @@ export class SchoolDetailsApiService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getSchoolById$Response(params: GetSchoolById$Params, context?: HttpContext): Observable<StrictHttpResponse<SchoolDetailsRequestDto>> {
+  getSchoolById$Response(params: GetSchoolById$Params, context?: HttpContext): Observable<StrictHttpResponse<SchoolDetailsResponseDto>> {
     return getSchoolById(this.http, this.rootUrl, params, context);
   }
 
@@ -148,9 +150,34 @@ export class SchoolDetailsApiService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getSchoolById(params: GetSchoolById$Params, context?: HttpContext): Observable<SchoolDetailsRequestDto> {
+  getSchoolById(params: GetSchoolById$Params, context?: HttpContext): Observable<SchoolDetailsResponseDto> {
     return this.getSchoolById$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SchoolDetailsRequestDto>): SchoolDetailsRequestDto => r.body)
+      map((r: StrictHttpResponse<SchoolDetailsResponseDto>): SchoolDetailsResponseDto => r.body)
+    );
+  }
+
+  /** Path part for operation `removeExamCenter()` */
+  static readonly RemoveExamCenterPath = '/api/schools/remove-exam-center/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeExamCenter()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeExamCenter$Response(params: RemoveExamCenter$Params, context?: HttpContext): Observable<StrictHttpResponse<SchoolDetailsResponseDto>> {
+    return removeExamCenter(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `removeExamCenter$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeExamCenter(params: RemoveExamCenter$Params, context?: HttpContext): Observable<SchoolDetailsResponseDto> {
+    return this.removeExamCenter$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SchoolDetailsResponseDto>): SchoolDetailsResponseDto => r.body)
     );
   }
 

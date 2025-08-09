@@ -37,6 +37,7 @@ import { SchoolDetailsFormComponent } from '../school-details-form/school-detail
 import dialogConfig from '../../imports/grid-config';
 import { AssignSchoolDialogComponent } from '../assign-school-dialog/assign-school-dialog.component';
 import { assignSchool } from '../../../api/fn/examination-centre-details-api/assign-school';
+import { deleteSubject } from '../../../api/fn/subject-details-api/delete-subject';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -105,7 +106,6 @@ export class SchoolDetailsGridComponent implements OnInit, OnDestroy {
 
   // ─── AG Grid setup ─────────────────────────────────────────────────────────
   columnDefs: ColDef<SchoolDetailsRequestDto>[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
     { field: 'name', headerName: 'Name', flex: 1 },
     { field: 'vigyanKendraName', headerName: 'Vigyan Kendra', flex: 1 },
     { field: 'examCentreName', headerName: 'Exam Center', flex: 1 },
@@ -287,7 +287,11 @@ export class SchoolDetailsGridComponent implements OnInit, OnDestroy {
           });
       });
   }
-  private handleDeAssignExamCenter(item: SchoolDetailsResponseDto): void {}
+  private handleDeAssignExamCenter(item: SchoolDetailsResponseDto): void {
+    this.schoolDetailsService.removeExamCenter({id: item.id!}).subscribe(() => {
+      this.loadData();
+    });
+  }
 
   private getExamCentersByVigyanKendra(
     id: number

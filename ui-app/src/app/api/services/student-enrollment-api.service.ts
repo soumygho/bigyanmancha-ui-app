@@ -15,8 +15,12 @@ import { createStudent } from '../fn/student-enrollment-api/create-student';
 import { CreateStudent$Params } from '../fn/student-enrollment-api/create-student';
 import { deleteStudent } from '../fn/student-enrollment-api/delete-student';
 import { DeleteStudent$Params } from '../fn/student-enrollment-api/delete-student';
+import { generateDummyData } from '../fn/student-enrollment-api/generate-dummy-data';
+import { GenerateDummyData$Params } from '../fn/student-enrollment-api/generate-dummy-data';
 import { getAllStudents } from '../fn/student-enrollment-api/get-all-students';
 import { GetAllStudents$Params } from '../fn/student-enrollment-api/get-all-students';
+import { getAllStudentsByVigyanKendraId } from '../fn/student-enrollment-api/get-all-students-by-vigyan-kendra-id';
+import { GetAllStudentsByVigyanKendraId$Params } from '../fn/student-enrollment-api/get-all-students-by-vigyan-kendra-id';
 import { getStudentById } from '../fn/student-enrollment-api/get-student-by-id';
 import { GetStudentById$Params } from '../fn/student-enrollment-api/get-student-by-id';
 import { StudentResponseDto } from '../models/student-response-dto';
@@ -151,6 +155,56 @@ export class StudentEnrollmentApiService extends BaseService {
   deleteStudent(params: DeleteStudent$Params, context?: HttpContext): Observable<void> {
     return this.deleteStudent$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllStudentsByVigyanKendraId()` */
+  static readonly GetAllStudentsByVigyanKendraIdPath = '/api/students/vigyan-kendra/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllStudentsByVigyanKendraId()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllStudentsByVigyanKendraId$Response(params: GetAllStudentsByVigyanKendraId$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<StudentResponseDto>>> {
+    return getAllStudentsByVigyanKendraId(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllStudentsByVigyanKendraId$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllStudentsByVigyanKendraId(params: GetAllStudentsByVigyanKendraId$Params, context?: HttpContext): Observable<Array<StudentResponseDto>> {
+    return this.getAllStudentsByVigyanKendraId$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<StudentResponseDto>>): Array<StudentResponseDto> => r.body)
+    );
+  }
+
+  /** Path part for operation `generateDummyData()` */
+  static readonly GenerateDummyDataPath = '/api/students/generate';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `generateDummyData()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  generateDummyData$Response(params?: GenerateDummyData$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return generateDummyData(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `generateDummyData$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  generateDummyData(params?: GenerateDummyData$Params, context?: HttpContext): Observable<string> {
+    return this.generateDummyData$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 

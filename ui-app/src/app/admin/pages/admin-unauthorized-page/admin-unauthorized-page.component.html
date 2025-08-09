@@ -1,0 +1,13 @@
+<!-- unauthorized-page.component.html -->
+<div class="unauth-container">
+  <mat-card class="unauth-card">
+    <mat-icon class="unauth-icon">lock</mat-icon>
+    <h1>401 - Unauthorized</h1>
+    <p>You don’t have permission to access this page.</p>
+    <div class="unauth-actions">
+      <button mat-raised-button color="primary" (click)="login()">Login</button>
+      <button mat-stroked-button color="accent" (click)="goHome()">Go to Homepage</button>
+    </div>
+  </mat-card>
+</div>
+

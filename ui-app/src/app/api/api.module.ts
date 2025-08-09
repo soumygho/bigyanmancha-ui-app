@@ -13,8 +13,11 @@ import { StudentEnrollmentApiService } from './services/student-enrollment-api.s
 import { StudentClassApiService } from './services/student-class-api.service';
 import { SchoolDetailsApiService } from './services/school-details-api.service';
 import { ExaminationCentreDetailsApiService } from './services/examination-centre-details-api.service';
+import { EnrollmentSessionManagementApiService } from './services/enrollment-session-management-api.service';
 import { StudentMarksApiService } from './services/student-marks-api.service';
+import { ReportingApiService } from './services/reporting-api.service';
 import { AuthApiService } from './services/auth-api.service';
+import { HelloApiService } from './services/hello-api.service';
 
 /**
  * Module that provides all services and configuration.
@@ -31,8 +34,11 @@ import { AuthApiService } from './services/auth-api.service';
     StudentClassApiService,
     SchoolDetailsApiService,
     ExaminationCentreDetailsApiService,
+    EnrollmentSessionManagementApiService,
     StudentMarksApiService,
+    ReportingApiService,
     AuthApiService,
+    HelloApiService,
     ApiConfiguration
   ],
 })

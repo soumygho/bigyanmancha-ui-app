@@ -118,7 +118,7 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   });
 
   readonly filteredExamCenters = computed(() => {
-    let filteredData: ExaminationCentreDetailsRequestDto[] = [];
+    let filteredData: ExaminationCentreDetailsRequestDto[] = this.examCenterList() ?? [];
     if (this.vigyanKendraFilter()) {
       filteredData = this.examCenterList().filter(
         (i) => i.vigyanKendraId === this.vigyanKendraFilter()
@@ -354,6 +354,7 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
     const value = event.value;
     //reset school filter
     this.schoolFilter.set(undefined);
+    this.examCenterFilter.set(undefined);
     this.vigyanKendraFilter.set(value);
   }
   setSchoolFilter(event: any) {
@@ -394,6 +395,7 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
     this.schoolFilter.set(undefined);
     this.vigyanKendraFilter.set(undefined);
     this.classFilter.set(undefined);
+    this.examCenterFilter.set(undefined);
     this.loadData();
   }
 

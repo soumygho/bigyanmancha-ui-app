@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { JwtResponse } from '../../api/models';
-import { LOCAL_STORAGE_KEY } from '../imports/admin-const';
+import {
+  ENROLLMENT_DEFAULT_KEY,
+  LOCAL_STORAGE_KEY,
+} from '../imports/admin-const';
+import EnrollmentDefault from '../interface/enrollment-default';
 
 interface LoggedInUserState {
   response: JwtResponse | undefined;
@@ -23,5 +27,17 @@ export class LocalStorageService {
 
   deleteLoggedInUserState() {
     localStorage.clear();
+  }
+
+  setEnrollmentPreference(config: EnrollmentDefault) {
+    localStorage.setItem(ENROLLMENT_DEFAULT_KEY, JSON.stringify(config));
+  }
+
+  getEnrollmentPreference(): EnrollmentDefault | undefined {
+    let data = localStorage.getItem(ENROLLMENT_DEFAULT_KEY);
+    if (data) {
+      return JSON.parse(data);
+    }
+    return undefined;
   }
 }

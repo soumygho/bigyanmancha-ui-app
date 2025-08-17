@@ -43,9 +43,6 @@ export class ExamCenterDetailsDialogComponent {
     this.rowData = this.data?.rowData ?? {};
     this.schoolNames = this.rowData.schoolNames ?? [];
     this.isEmptySchools = this.schoolNames.length === 0;
-    console.trace('dialog data : ');
-    console.trace(this.data);
-    console.trace(this.rowData);
   }
   ngOnInit(): void {}
 

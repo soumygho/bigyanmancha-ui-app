@@ -70,33 +70,37 @@ export class StateManagerService {
 
   private loadConfigData() {
     let state = this._globalState();
-    this.vigyanKendraService
-      .getAllVigyanKendras()
-      .subscribe({
-        next: (response) => {
-          console.trace(response);
-          state = { ...this._globalState(), vigyanKendras: response };
-          this._globalState.set(state);
-        },
-        error: (err) => {
-          console.error(err);
-          this.notificationService.show(
-            'Error while getting vigyan kendras information from server.'
-          );
-        },
-      });
+    this.vigyanKendraService.getAllVigyanKendras().subscribe({
+      next: (response) => {
+        state = {
+          ...this._globalState(),
+          vigyanKendras: response.sort(
+            (a, b) => a.name?.localeCompare(b.name ?? '') ?? 0
+          ),
+        };
+        this._globalState.set(state);
+      },
+      error: (err) => {
+        console.error(err);
+        this.notificationService.show(
+          'Error while getting vigyan kendras information from server.'
+        );
+      },
+    });
     this.studentClassApiService.getAllClasses().subscribe((response) => {
-      console.trace(response);
       state = { ...this._globalState(), classes: response };
       this._globalState.set(state);
     });
     this.studentSchoolDetailsService.getAllSchools().subscribe((response) => {
-      console.trace(response);
-      state = { ...this._globalState(), schools: response };
+      state = {
+        ...this._globalState(),
+        schools: response.sort(
+          (a, b) => a.name?.localeCompare(b.name ?? '') ?? 0
+        ),
+      };
       this._globalState.set(state);
     });
     this.subjectDetailsService.getAllSubjects().subscribe((response) => {
-      console.trace(response);
       state = { ...this._globalState(), subjects: response, initialized: true };
       this._globalState.set(state);
     });
@@ -104,7 +108,6 @@ export class StateManagerService {
 
   mutateLoggedInUserState(jwt: JwtResponse, status: boolean): void {
     var claims = jwtDecode<JWTClaims>(jwt?.jwt!);
-    console.trace(claims);
     var state = {
       ...this._loggedInUserState(),
       isLoggedIn: status,
@@ -116,10 +119,8 @@ export class StateManagerService {
 
   getLoggedInUserState(): LoggedInUserState {
     let state = this.localStorageService.getLoggedInUserState();
-    console.trace(state);
     if (state && !this.jwtHelperService.isTokenExpired(state)) {
       let claims = jwtDecode<JWTClaims>(state);
-      console.trace(claims);
       this._loggedInUserState.set({
         ...this._loggedInUserState(),
         ...claims,
@@ -132,8 +133,12 @@ export class StateManagerService {
   mutateVigyanKendraData() {
     let state = this._globalState();
     this.vigyanKendraService.getAllVigyanKendras().subscribe((response) => {
-      console.trace(response);
-      state = { ...this._globalState(), vigyanKendras: response };
+      state = {
+        ...this._globalState(),
+        vigyanKendras: response.sort(
+          (a, b) => a.name?.localeCompare(b.name ?? '') ?? 0
+        ),
+      };
       this._globalState.set(state);
     });
   }
@@ -141,7 +146,6 @@ export class StateManagerService {
   mutateStudentClassData() {
     let state = this._globalState();
     this.studentClassApiService.getAllClasses().subscribe((response) => {
-      console.trace(response);
       state = { ...this._globalState(), classes: response };
       this._globalState.set(state);
     });
@@ -150,8 +154,12 @@ export class StateManagerService {
   mutateSchoolData() {
     let state = this._globalState();
     this.studentSchoolDetailsService.getAllSchools().subscribe((response) => {
-      console.trace(response);
-      state = { ...this._globalState(), schools: response };
+      state = {
+        ...this._globalState(),
+        schools: response.sort(
+          (a, b) => a.name?.localeCompare(b.name ?? '') ?? 0
+        ),
+      };
       this._globalState.set(state);
     });
   }
@@ -159,7 +167,6 @@ export class StateManagerService {
   mutateSubjectData() {
     let state = this._globalState();
     this.subjectDetailsService.getAllSubjects().subscribe((response) => {
-      console.trace(response);
       state = { ...this._globalState(), subjects: response, initialized: true };
       this._globalState.set(state);
     });

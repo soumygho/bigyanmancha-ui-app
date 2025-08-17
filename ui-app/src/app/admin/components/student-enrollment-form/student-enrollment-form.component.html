@@ -68,7 +68,7 @@
             <!-- Roll Number -->
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Roll</mat-label>
-              <input matInput formControlName="roll" placeholder="Enter roll" />
+              <input matInput formControlName="roll" placeholder="Enter roll" [disabled]="!this.isAdminUser"/>
               <mat-error *ngIf="form.get('roll')?.hasError('required')">
                 Roll number is required
               </mat-error>
@@ -85,6 +85,7 @@
                 matInput
                 formControlName="number"
                 placeholder="Enter number"
+                [disabled]="!this.isAdminUser"
               />
               <mat-error *ngIf="form.get('number')?.hasError('required')">
                 Number is required

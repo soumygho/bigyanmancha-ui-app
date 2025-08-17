@@ -37,7 +37,6 @@ export class AdminMenuBarComponent implements OnInit {
       .pipe(filter((ev) => ev instanceof NavigationEnd))
       .subscribe(() => {
         this.isAdminUrl.set(this.disallowedUrls.includes(this.router.url));
-        console.trace(this.shouldShow());
       });
     this.authService.isAuthenticated();
   }

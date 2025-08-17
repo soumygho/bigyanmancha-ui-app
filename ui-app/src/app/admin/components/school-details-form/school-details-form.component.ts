@@ -46,13 +46,8 @@ export class SchoolDetailsFormComponent implements OnInit {
   ) {
     this.rowData = this.data?.rowData ?? {};
     this.vigyanKendraList = this.data?.vigyanKendraList ?? [];
-    console.trace('dialog data : ');
-    console.trace(this.data);
-    console.trace(this.rowData);
   }
   ngOnInit(): void {
-    console.trace('Vigyan Kendra Id');
-    console.trace(this.rowData?.vigyanKendraId);
     this.form = this.fb.group({
       vigyanKendraId: [this.rowData?.vigyanKendraId ?? '', Validators.required],
       name: [this.rowData?.name ?? '', Validators.required],
@@ -68,6 +63,7 @@ export class SchoolDetailsFormComponent implements OnInit {
     this.form.reset();
   }
   onCancel(): void {
+    this.resetForm();
     this.dialogRef.close(); // or pass data like this.dialogRef.close(false)
   }
 }

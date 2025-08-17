@@ -86,7 +86,6 @@ export class VigyanKendraGridComponent implements OnInit, OnDestroy {
   }
 
   onGridReady(e: GridReadyEvent) {
-    console.trace('grid is ready!');
     this.gridApi = e.api;
   }
 
@@ -104,7 +103,6 @@ export class VigyanKendraGridComponent implements OnInit, OnDestroy {
     this.vigyankendraDetailsService
       .getAllVigyanKendras()
       .subscribe((response) => {
-        console.trace(response);
         this.data.set(response);
       });
   }
@@ -119,7 +117,6 @@ export class VigyanKendraGridComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .subscribe((dto) => {
-        console.trace(dto);
         if (!dto) return;
         let request: VigyanKendraDetailsRequestDto = {
           name: dto.name,
@@ -135,8 +132,6 @@ export class VigyanKendraGridComponent implements OnInit, OnDestroy {
   }
 
   edit(item: VigyanKendraDetailsRequestDto) {
-    console.trace('Edit clicked!');
-    console.trace(item);
     this.dialog
       .open(VigyanKendraFormComponent, {
         ...this.dialogConfig,
@@ -152,7 +147,6 @@ export class VigyanKendraGridComponent implements OnInit, OnDestroy {
           name: dto.name,
           code: dto.code,
         };
-        console.trace(request);
         this.vigyankendraDetailsService
           .updateVigyanKendraDetails({ body: request })
           .subscribe(() => {
@@ -166,7 +160,10 @@ export class VigyanKendraGridComponent implements OnInit, OnDestroy {
     if (!confirm(`Delete "${item.name}"?`)) return;
     this.vigyankendraDetailsService
       .deleteVigyanKendraById({ id: item.id ?? -1 })
-      .subscribe(() => this.loadData());
+      .subscribe(() => {
+        this.globalStateManagerService.mutateVigyanKendraData();
+        this.loadData();
+      });
   }
 
   // called from the “Actions” renderer

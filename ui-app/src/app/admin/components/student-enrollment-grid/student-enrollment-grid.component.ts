@@ -21,8 +21,12 @@ import {
   ModuleRegistry,
 } from 'ag-grid-community';
 import { MatDialog } from '@angular/material/dialog';
-import { StudentEnrollmentApiService } from '../../../api/services';
 import {
+  ExaminationCentreDetailsApiService,
+  StudentEnrollmentApiService,
+} from '../../../api/services';
+import {
+  ExaminationCentreDetailsRequestDto,
   SchoolDetailsResponseDto,
   StudentClassDetailsResponseDto,
   StudentResponseDto,
@@ -33,6 +37,9 @@ import { StateManagerService } from '../../services/state-manager.service';
 import dialogConfig from '../../imports/grid-config';
 import { LoggedInUserState } from '../../imports/app-state-import';
 import { NotificationService } from '../../services/notification.service';
+import { LocalStorageService } from '../../services/local-storage.service';
+import EnrollmentDefault from '../../interface/enrollment-default';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -47,6 +54,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
     MatButtonModule,
     MatInputModule,
     MatSelectModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './student-enrollment-grid.component.html',
   styleUrl: './student-enrollment-grid.component.css',
@@ -57,6 +65,10 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   private readonly globalStateManagerService: StateManagerService =
     inject(StateManagerService);
   private readonly notficationService = inject(NotificationService);
+  private readonly examCenterService = inject(
+    ExaminationCentreDetailsApiService
+  );
+  private readonly localStorageService = inject(LocalStorageService);
 
   private readonly dialogConfig = dialogConfig;
   //local state
@@ -64,11 +76,18 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   readonly vigyanKendraFilter = signal<undefined | null | number>(undefined);
   readonly schoolFilter = signal<undefined | null | string>(undefined);
   readonly classFilter = signal<undefined | null | string>(undefined);
+  readonly examCenterFilter = signal<undefined | null | string>(undefined);
   readonly vigyanKendraList = signal<VigyanKendraDetails[]>([]);
   readonly schoolDetailsList = signal<SchoolDetailsResponseDto[]>([]);
   readonly studentClassDetailsList = signal<StudentClassDetailsResponseDto[]>(
     []
   );
+  readonly defaultClass = signal<undefined | null | string>(undefined);
+  readonly defaultSchool = signal<undefined | null | string>(undefined);
+  readonly defaultVigyanKendra = signal<undefined | null | string>(undefined);
+  readonly examCenterList = signal<ExaminationCentreDetailsRequestDto[]>([]);
+  readonly defaultSchoolList = signal<SchoolDetailsResponseDto[]>([]);
+
   readonly userLoggedInState = signal<LoggedInUserState | undefined>(undefined);
   readonly filteredItems = computed(() => {
     let filteredData = this.data();
@@ -78,13 +97,31 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
       );
     }
     if (this.schoolFilter()) {
-      filteredData = this.data().filter(
+      filteredData = filteredData.filter(
         (i) => i.schoolId === this.schoolFilter()
       );
     }
     if (this.classFilter()) {
-      filteredData = this.data().filter(
+      filteredData = filteredData.filter(
         (i) => i.classId === this.classFilter()
+      );
+    }
+    if (this.examCenterFilter()) {
+      filteredData = filteredData.filter(
+        (i) => i.examinationCentreId === this.examCenterFilter()
+      );
+    }
+    filteredData = filteredData ?? [];
+    return filteredData.sort(
+      (a, b) => a.name?.localeCompare(b.name ?? '') ?? 0
+    );
+  });
+
+  readonly filteredExamCenters = computed(() => {
+    let filteredData: ExaminationCentreDetailsRequestDto[] = [];
+    if (this.vigyanKendraFilter()) {
+      filteredData = this.examCenterList().filter(
+        (i) => i.vigyanKendraId === this.vigyanKendraFilter()
       );
     }
     filteredData = filteredData ?? [];
@@ -92,15 +129,23 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   });
 
   readonly filteredSchool = computed(() => {
-    let filteredData: SchoolDetailsResponseDto[] = [];
+    let filteredData: SchoolDetailsResponseDto[] = this.schoolDetailsList() ?? [];
     if (this.vigyanKendraFilter()) {
-      filteredData = this.schoolDetailsList().filter(
+      filteredData = filteredData.filter(
         (i) => i.vigyanKendraId === this.vigyanKendraFilter()
+      );
+    }
+    if(this.examCenterFilter()) {
+      filteredData = filteredData.filter(
+        (i) => i.examCentreId === this.examCenterFilter()
       );
     }
     filteredData = filteredData ?? [];
     return filteredData;
   });
+
+  //default enrollment config dropdown form control
+  form: any;
 
   // ─── AG Grid setup ─────────────────────────────────────────────────────────
   columnDefs: ColDef<StudentResponseDto>[] = [
@@ -125,18 +170,33 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
 
   gridApi!: GridReadyEvent['api'];
 
-  constructor() {
+  constructor(private fb: FormBuilder) {
     effect(
       () => {
         let state = this.globalStateManagerService.globalState();
         if (state && state.vigyanKendras) {
           this.vigyanKendraList.set(state.vigyanKendras);
+          this.form
+            ?.get('vigyanKendraId')
+            .patchValue(
+              this.localStorageService.getEnrollmentPreference()?.vigyanKendraId
+            );
         }
         if (state && state.schools) {
           this.schoolDetailsList.set(state.schools);
+          this.form
+            ?.get('schoolId')
+            .patchValue(
+              this.localStorageService.getEnrollmentPreference()?.schoolId
+            );
         }
         if (state && state.classes) {
           this.studentClassDetailsList.set(state.classes);
+          this.form
+            ?.get('classId')
+            .patchValue(
+              this.localStorageService.getEnrollmentPreference()?.classId
+            );
         }
       },
       { allowSignalWrites: true }
@@ -149,10 +209,44 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.form = this.fb.group({
+      vigyanKendraId: [''],
+      schoolId: [''],
+      classId: [''],
+    });
     let loginState = this.globalStateManagerService.getLoggedInUserState();
     this.userLoggedInState.set(loginState);
     this.loadConfigData();
     this.loadData();
+    //initialize default enrollment config
+  }
+  initializeDefaultEnrollmentConfig() {
+    if (this.localStorageService.getEnrollmentPreference()) {
+      var config = this.localStorageService.getEnrollmentPreference();
+      this.defaultVigyanKendra.set(config?.vigyanKendraId);
+      this.defaultSchoolList.set(
+        this.schoolDetailsList().filter(
+          (school) => school.vigyanKendraId === config?.vigyanKendraId
+        )
+      );
+      this.defaultClass.set(config?.classId);
+      this.defaultSchool.set(config?.schoolId);
+      this.form
+        ?.get('vigyanKendraId')
+        .patchValue(
+          this.localStorageService.getEnrollmentPreference()?.vigyanKendraId
+        );
+      this.form
+        ?.get('schoolId')
+        .patchValue(
+          this.localStorageService.getEnrollmentPreference()?.schoolId
+        );
+      this.form
+        ?.get('classId')
+        .patchValue(
+          this.localStorageService.getEnrollmentPreference()?.classId
+        );
+    }
   }
 
   onGridReady(e: GridReadyEvent) {
@@ -161,24 +255,16 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
 
   loadConfigData() {
     this.globalStateManagerService.initializeGlobalState();
+    this.getAllExamCenters();
   }
 
   loadData() {
-    if (this.userLoggedInState()?.isAdminUser) {
-      if (this.vigyanKendraFilter()) {
-        this.enrollmentService
-          .getAllStudentsByVigyanKendraId({ id: this.vigyanKendraFilter()! })
-          .subscribe((response) => {
-            this.data.set(response);
-          });
-      } else {
-        this.notficationService.show('Please select a vigyan kendra to query.');
-      }
-    } else {
-      this.enrollmentService.getAllStudents().subscribe((response) => {
-        this.data.set(response);
-      });
-    }
+    this.enrollmentService.getAllStudents().subscribe((response) => {
+      this.data.set(
+        response.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
+      );
+      this.initializeDefaultEnrollmentConfig();
+    });
   }
 
   create() {
@@ -190,11 +276,12 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
           schoolList: [...this.schoolDetailsList()],
           classList: [...this.studentClassDetailsList()],
           vigyanKendraList: [...this.vigyanKendraList()],
+          isAdminUser: this.userLoggedInState()?.isAdminUser,
+          preference: this.localStorageService.getEnrollmentPreference(),
         },
       })
       .afterClosed()
       .subscribe((dto) => {
-        console.trace(dto);
         if (!dto) return;
         let request: any = {
           name: dto.name,
@@ -213,8 +300,6 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   }
 
   edit(item: StudentResponseDto) {
-    console.trace('Edit clicked!');
-    console.trace(item);
     this.dialog
       .open(StudentEnrollmentFormComponent, {
         ...this.dialogConfig,
@@ -223,6 +308,7 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
           schoolList: [...this.schoolDetailsList()],
           classList: [...this.studentClassDetailsList()],
           vigyanKendraList: [...this.vigyanKendraList()],
+          isAdminUser: this.userLoggedInState()?.isAdminUser,
         },
       })
       .afterClosed()
@@ -280,16 +366,75 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
     this.classFilter.set(value);
   }
 
+  setExamCenterFilter(event: any) {
+    const value = event.value;
+    this.examCenterFilter.set(value);
+  }
+
+  setDefaultSchool(event: any) {
+    this.defaultSchool.set(event.value);
+  }
+
+  setDefaultClass(event: any) {
+    this.defaultClass.set(event.value);
+  }
+
+  setDefaultVigyanKendra(event: any) {
+    this.defaultVigyanKendra.set(event.value);
+    this.defaultSchoolList.set(
+      this.schoolDetailsList().filter(
+        (school) => school.vigyanKendraId === event.value
+      )
+    );
+  }
+
   onRefresh() {
     if (!this.userLoggedInState()?.isAdminUser) {
-      this.schoolFilter.set(undefined);
-      this.vigyanKendraFilter.set(undefined);
-      this.classFilter.set(undefined);
     }
+    this.schoolFilter.set(undefined);
+    this.vigyanKendraFilter.set(undefined);
+    this.classFilter.set(undefined);
     this.loadData();
+  }
+
+  clearFilter() {
+    this.schoolFilter.set(undefined);
+    this.vigyanKendraFilter.set(undefined);
+    this.classFilter.set(undefined);
+    this.examCenterFilter.set(undefined);
+  }
+
+  getAllExamCenters() {
+    this.examCenterService.getAllExamCenters().subscribe((data) => {
+      this.examCenterList.set(
+        data.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
+      );
+    });
   }
 
   getByVigyanKendra() {
     this.loadData();
+  }
+
+  setDefaultEnrollmentConfig() {
+    if (
+      !this.defaultClass() ||
+      !this.defaultSchool() ||
+      !this.defaultVigyanKendra()
+    ) {
+      this.notficationService.show(
+        `Please select vigyankendra, school and class to set deafult.`
+      );
+    } else {
+      let config: EnrollmentDefault = {
+        vigyanKendraId: this.defaultVigyanKendra(),
+        schoolId: this.defaultSchool(),
+        classId: this.defaultClass(),
+      };
+      this.localStorageService.setEnrollmentPreference(config);
+      this.notficationService.show(
+        `Default preference has been set, no need to select these in the form.`
+      );
+    }
   }
 }

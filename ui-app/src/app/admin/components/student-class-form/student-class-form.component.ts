@@ -43,9 +43,6 @@ export class StudentClassFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: StudentClassDialogData
   ) {
     this.rowData = this.data?.rowData ?? {};
-    console.trace('dialog data : ');
-    console.trace(this.data);
-    console.trace(this.rowData);
   }
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -62,6 +59,7 @@ export class StudentClassFormComponent implements OnInit {
     this.form.reset();
   }
   onCancel(): void {
+    this.resetForm();
     this.dialogRef.close(); // or pass data like this.dialogRef.close(false)
   }
 }

@@ -50,12 +50,8 @@ export class EnrollmentSessionFormComponent {
     @Inject(MAT_DIALOG_DATA) public data: EnrollmentSessionDialogData
   ) {
     this.rowData = this.data?.rowData ?? {};
-    console.trace('dialog data : ');
-    console.trace(this.data);
-    console.trace(this.rowData);
   }
   ngOnInit(): void {
-    console.trace('Vigyan Kendra Id');
     this.form = this.fb.group({
       name: [this.rowData?.name ?? '', Validators.required],
       year: [this.rowData?.year ?? '', Validators.required],
@@ -75,6 +71,7 @@ export class EnrollmentSessionFormComponent {
     this.form?.reset();
   }
   onCancel(): void {
+    this.resetForm();
     this.dialogRef.close(); // or pass data like this.dialogRef.close(false)
   }
 }

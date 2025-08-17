@@ -97,7 +97,6 @@ export class EnrollmentSessionGridComponent {
   }
 
   onGridReady(e: GridReadyEvent) {
-    console.trace('grid is ready!');
     this.gridApi = e.api;
   }
 
@@ -109,7 +108,6 @@ export class EnrollmentSessionGridComponent {
     this.enrollmentSessionService
       .getAllEnrollmentSession()
       .subscribe((response) => {
-        console.trace(response);
         this.data.set(response);
       });
   }
@@ -124,12 +122,10 @@ export class EnrollmentSessionGridComponent {
       })
       .afterClosed()
       .subscribe((dto) => {
-        console.trace(dto);
         if (!dto) return;
         let request: EnrollmentSession = {
           ...dto,
         };
-        console.trace(dto);
         this.enrollmentSessionService
           .createEnrollmentSession({ body: request })
           .subscribe(() => {
@@ -139,8 +135,6 @@ export class EnrollmentSessionGridComponent {
   }
 
   edit(item: EnrollmentSession) {
-    console.trace('Edit clicked!');
-    console.trace(item);
     this.dialog
       .open(EnrollmentSessionFormComponent, {
         ...this.dialogConfig,

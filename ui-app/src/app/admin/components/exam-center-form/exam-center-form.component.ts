@@ -50,25 +50,37 @@ export class ExamCenterFormComponent implements OnInit {
     this.rowData = this.data?.rowData ?? {};
     this.vigyanKendraList = this.data?.vigyanKendraList ?? [];
     this.schoolList = this.data?.schoolList ?? [];
-    console.trace('dialog data : ');
-    console.trace(this.data);
-    console.trace(this.rowData);
   }
   ngOnInit(): void {
-    console.trace('Vigyan Kendra Id');
-    console.trace(this.rowData?.vigyanKendraId);
     this.form = this.fb.group({
       vigyanKendraId: [this.rowData?.vigyanKendraId ?? '', Validators.required],
-      schoolDetailsId: [this.rowData?.schoolDetailsId ?? '', Validators.required],
+      schoolDetailsId: [
+        this.rowData?.schoolDetailsId ?? '',
+        Validators.required,
+      ],
       name: [this.rowData?.name ?? '', Validators.required],
     });
     this.setFilteredSchools(this.form.value.vigyanKendraId);
+    this.initializeForm();
+  }
+
+  private initializeForm() {
+    if (this.vigyanKendraList.length === 1) {
+      const vigyanKendraDD = this.form?.get('vigyanKendraId');
+      vigyanKendraDD?.patchValue(this.vigyanKendraList.at(0)?.id);
+      this.filteredSchoolList.set(
+        this.schoolList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
+      );
+    }
   }
 
   private setFilteredSchools(id: number): void {
     let filteredList = [];
-    filteredList = this.schoolList.filter(school => school.vigyanKendraId === id) ?? [];
-    this.filteredSchoolList.set(filteredList);
+    filteredList =
+      this.schoolList.filter((school) => school.vigyanKendraId === id) ?? [];
+    this.filteredSchoolList.set(
+      filteredList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
+    );
   }
 
   save() {
@@ -77,9 +89,11 @@ export class ExamCenterFormComponent implements OnInit {
   }
 
   resetForm() {
+    this.initializeForm();
     this.form.reset();
   }
   onCancel(): void {
+    this.resetForm();
     this.dialogRef.close(); // or pass data like this.dialogRef.close(false)
   }
 

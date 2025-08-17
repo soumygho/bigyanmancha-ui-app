@@ -64,13 +64,8 @@ export class AdminUserFormComponent {
   ) {
     this.rowData = this.data?.rowData ?? {};
     this.vigyanKendraList = this.data?.vigyanKendraList ?? [];
-    console.trace('dialog data : ');
-    console.trace(this.data);
-    console.trace(this.rowData);
   }
   ngOnInit(): void {
-    console.trace('Vigyan Kendra Id');
-    console.trace(this.rowData?.vigyanKendraId);
     let role = this.resolveRole();
     this.form = this.fb.group({
       vigyanKendraId: [this.rowData?.vigyanKendraId ?? '', Validators.required],
@@ -79,11 +74,6 @@ export class AdminUserFormComponent {
       password: ['', !this.isEdit ? Validators.required : null],
       role: [role, Validators.required],
     });
-
-    if(!this.isEdit) {
-      const emailText = this.form?.get('email');
-      emailText?.patchValue('test@test.com')
-    }
   }
 
   resolveRole(): string {
@@ -105,6 +95,7 @@ export class AdminUserFormComponent {
     this.form?.reset();
   }
   onCancel(): void {
+    this.resetForm();
     this.dialogRef.close(); // or pass data like this.dialogRef.close(false)
   }
 

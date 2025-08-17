@@ -128,7 +128,6 @@ export class SchoolDetailsGridComponent implements OnInit, OnDestroy {
     effect(
       () => {
         let state = this.globalStateManagerService.globalState();
-        console.trace(state);
         if (state && state.vigyanKendras) {
           this.vigyanKendraList.set(state.vigyanKendras);
         }
@@ -148,7 +147,6 @@ export class SchoolDetailsGridComponent implements OnInit, OnDestroy {
   }
 
   onGridReady(e: GridReadyEvent) {
-    console.trace('grid is ready!');
     this.gridApi = e.api;
   }
 
@@ -158,7 +156,6 @@ export class SchoolDetailsGridComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.schoolDetailsService.getAllSchools().subscribe((response) => {
-      console.trace(response);
       this.data.set(response);
     });
     this.examCenterDetailsService.getAllExamCenters().subscribe((response) => {
@@ -177,7 +174,6 @@ export class SchoolDetailsGridComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .subscribe((dto) => {
-        console.trace(dto);
         if (!dto) return;
         let request: any = {
           name: dto.name,
@@ -193,8 +189,6 @@ export class SchoolDetailsGridComponent implements OnInit, OnDestroy {
   }
 
   edit(item: SchoolDetailsResponseDto) {
-    console.trace('Edit clicked!');
-    console.trace(item);
     this.dialog
       .open(SchoolDetailsFormComponent, {
         ...this.dialogConfig,
@@ -273,7 +267,6 @@ export class SchoolDetailsGridComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .subscribe((dto) => {
-        console.trace(dto);
         if (!dto) return;
         let request: any = {
           schoolIds: [item.id],

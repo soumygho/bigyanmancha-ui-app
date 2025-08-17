@@ -50,13 +50,8 @@ export class AssignSchoolDialogComponent implements OnInit {
     this.rowData = this.data?.rowData ?? {};
     this.vigyanKendraList = this.data?.vigyanKendraList ?? [];
     this.examCenterList = this.data?.examCenterList ?? [];
-    console.trace('dialog data : ');
-    console.trace(this.data);
-    console.trace(this.rowData);
   }
   ngOnInit(): void {
-    console.trace('Vigyan Kendra Id');
-    console.trace(this.rowData?.vigyanKendraId);
     this.form = this.fb.group({
       examCenterId: [this.rowData?.examCentreId ?? '', Validators.required],
     });

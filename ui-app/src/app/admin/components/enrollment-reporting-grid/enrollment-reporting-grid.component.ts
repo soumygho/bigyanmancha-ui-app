@@ -96,7 +96,6 @@ export class EnrollmentReportingGridComponent implements OnInit, OnDestroy {
     effect(
       () => {
         let state = this.globalStateManagerService.globalState();
-        console.trace(state);
         if (state && state.vigyanKendras) {
           this.vigyanKendraList.set(state.vigyanKendras);
         }
@@ -119,7 +118,6 @@ export class EnrollmentReportingGridComponent implements OnInit, OnDestroy {
   }
 
   onGridReady(e: GridReadyEvent) {
-    console.trace('grid is ready!');
     this.gridApi = e.api;
   }
 
@@ -134,7 +132,6 @@ export class EnrollmentReportingGridComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.reportingApiService.getAllReports().subscribe((response) => {
-      console.trace(response);
       this.data.set(response);
     });
   }

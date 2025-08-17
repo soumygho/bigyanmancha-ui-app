@@ -131,7 +131,6 @@ export class ExamCenterGridComponent {
     effect(
       () => {
         let state = this.globalStateManagerService.globalState();
-        console.trace(state);
         if (state && state.vigyanKendras) {
           this.vigyanKendraList.set(state.vigyanKendras);
           this.schoolList.set(state.schools);
@@ -152,7 +151,6 @@ export class ExamCenterGridComponent {
   }
 
   onGridReady(e: GridReadyEvent) {
-    console.trace('grid is ready!');
     this.gridApi = e.api;
   }
 
@@ -162,7 +160,6 @@ export class ExamCenterGridComponent {
 
   loadData() {
     this.examCenterDetailsService.getAllExamCenters().subscribe((response) => {
-      console.trace(response);
       this.data.set(response);
     });
   }
@@ -179,7 +176,6 @@ export class ExamCenterGridComponent {
       })
       .afterClosed()
       .subscribe((dto) => {
-        console.trace(dto);
         if (!dto) return;
         let request: any = {
           name: dto.name,
@@ -196,8 +192,6 @@ export class ExamCenterGridComponent {
   }
 
   edit(item: ExaminationCentreDetailsRequestDto) {
-    console.trace('Edit clicked!');
-    console.trace(item);
     this.dialog
       .open(ExamCenterFormComponent, {
         ...this.dialogConfig,
@@ -227,10 +221,9 @@ export class ExamCenterGridComponent {
 
   delete(item: ExaminationCentreDetailsRequestDto) {
     if (!confirm(`Delete "${item.name}"?`)) return;
-    this.schoolDetailsService
-      .deleteSchool({ id: item.id ?? -1 })
+    this.examCenterDetailsService
+      .deleteExamCenter({ id: item.id ?? -1 })
       .subscribe(() => {
-        this.globalStateManagerService.mutateSchoolData();
         this.loadData();
       });
   }

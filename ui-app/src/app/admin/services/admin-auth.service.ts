@@ -61,7 +61,6 @@ export class AdminAuthService {
       !!token &&
       !this.jwtHelperService.isTokenExpired(token)
     );
-    console.trace('Is authenticated: '+isLoggedIn);
     this._isAuthenticatedSignal.set(isLoggedIn);
     return isLoggedIn;
   }

@@ -25,7 +25,6 @@ export class HeaderComponent {
       .pipe(filter(ev => ev instanceof NavigationEnd))
       .subscribe(() => {
         this.isAdminUrl.set(this.router.url.startsWith('/admin'));
-        console.trace(this.shouldShow());
       }
       );
   }

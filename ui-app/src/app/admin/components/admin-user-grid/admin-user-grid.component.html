@@ -27,6 +27,11 @@
     </mat-select>
   </mat-form-field>
 </div>
+<div>
+  <span
+    >Total Records Count : <b>{{ filteredItems().length }}</b></span
+  >
+</div>
 <div style="height: 600px; width: 100%">
   <ag-grid-angular
     class="ag-theme-alpine"
@@ -39,4 +44,3 @@
   >
   </ag-grid-angular>
 </div>
-

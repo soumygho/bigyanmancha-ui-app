@@ -22,7 +22,6 @@ export class AdminLandingPageComponent implements OnInit {
   ngOnInit() {
     this.globalStateManagerService.initializeGlobalState();
     let loginState = this.globalStateManagerService.getLoggedInUserState();
-    console.trace(loginState);
     this.userLoggedInState.set(loginState);
     this.isLoggedIn.set(loginState.isLoggedIn);
   }

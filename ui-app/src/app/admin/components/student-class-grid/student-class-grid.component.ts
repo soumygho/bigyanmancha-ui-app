@@ -90,7 +90,6 @@ export class StudentClassGridComponent implements OnInit, OnDestroy {
   }
 
   onGridReady(e: GridReadyEvent) {
-    console.trace('grid is ready!');
     this.gridApi = e.api;
   }
 
@@ -106,7 +105,6 @@ export class StudentClassGridComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.studentClassDetailsService.getAllClasses().subscribe((response) => {
-      console.trace(response);
       this.data.set(response);
     });
   }
@@ -121,7 +119,6 @@ export class StudentClassGridComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .subscribe((dto) => {
-        console.trace(dto);
         if (!dto) return;
         let request: StudentClassRequestDto = {
           name: dto.name,
@@ -136,8 +133,6 @@ export class StudentClassGridComponent implements OnInit, OnDestroy {
   }
 
   edit(item: StudentClassDetailsResponseDto) {
-    console.trace('Edit clicked!');
-    console.trace(item);
     this.dialog
       .open(StudentClassFormComponent, {
         ...this.dialogConfig,
@@ -152,7 +147,6 @@ export class StudentClassGridComponent implements OnInit, OnDestroy {
           id: item.id,
           name: dto.name,
         };
-        console.trace(request);
         this.studentClassDetailsService
           .updateClass({ body: request })
           .subscribe(() => {

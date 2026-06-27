@@ -1,0 +1,69 @@
+<div class="form-container">
+  <!-- item-dialog.component.html -->
+
+  <form [formGroup]="form!" (ngSubmit)="save()">
+    <h2 mat-dialog-title>{{ title }}</h2>
+    <mat-card>
+      <mat-card-content>
+        <div class="fluid-container">
+          <div class="row">
+            <!-- Name Field -->
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Enrollemnt Name</mat-label>
+              <input
+                matInput
+                formControlName="name"
+                placeholder="Enter Enrollemnt name"
+              />
+              <mat-error *ngIf="form?.get('name')?.hasError('required')">
+                name is required
+              </mat-error>
+              <mat-error *ngIf="form?.get('name')?.hasError('minlength')">
+                name must be at least 3 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <!-- Name Field -->
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Enrollemnt Year</mat-label>
+              <input
+                matInput
+                formControlName="year"
+                placeholder="Enter enrollemnt year"
+              />
+              <mat-error *ngIf="form?.get('year')?.hasError('required')">
+                year is required
+              </mat-error>
+              <mat-error *ngIf="form?.get('year')?.hasError('minlength')">
+                year must be at least 4 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!form?.valid"
+          class="me-2"
+        >
+          Submit
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          type="button"
+          (click)="resetForm()"
+          class="me-2"
+        >
+          Reset
+        </button>
+        <button mat-stroked-button (click)="onCancel()">Cancel</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>

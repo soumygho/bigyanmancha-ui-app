@@ -1,0 +1,71 @@
+<!-- items-grid.component.html -->
+<div class="toolbar mt-5">
+  <div>
+    <mat-form-field
+      appearance="outline"
+      class="filter m-2"
+      *ngIf="this.userLoggedInState()?.isAdminUser"
+    >
+      <mat-label>Select VigyanKendra</mat-label>
+      <mat-select (selectionChange)="setVigyanKendraFilter($event)">
+        <mat-option
+          *ngFor="let vigyanKendra of vigyanKendraList()"
+          [value]="vigyanKendra.id"
+        >
+          {{ vigyanKendra.code }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field
+      appearance="outline"
+      class="filter m-2"
+      *ngIf="this.userLoggedInState()?.isAdminUser"
+    >
+      <mat-label>Select Session</mat-label>
+      <mat-select (selectionChange)="setEnrollemntSessionFilter($event)">
+        <mat-option
+          *ngFor="let session of enrollmentList()"
+          [value]="session.id"
+        >
+          {{ session.year }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      matTooltip="Generate report for vigyankendra"
+      (click)="generateReport()"
+      aria-label="Generate report for vigyankendra"
+      class="m-2"
+      *ngIf="this.userLoggedInState()?.isAdminUser"
+    >
+      Generate Report
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      matTooltip="Refresh"
+      (click)="onRefresh()"
+      aria-label="Refresh"
+    >
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+</div>
+<div>
+  <span>Total Records Count : <b>{{data().length}}</b></span>
+</div>
+<div style="height: 600px; width: 100%">
+  <ag-grid-angular
+    class="ag-theme-alpine"
+    [theme]="'legacy'"
+    [rowData]="this.data()"
+    [columnDefs]="columnDefs"
+    style="width: 100%; height: 600px"
+    rowSelection="single"
+    (gridReady)="onGridReady($event)"
+    [context]="{ componentParent: this }"
+  >
+  </ag-grid-angular>
+</div>

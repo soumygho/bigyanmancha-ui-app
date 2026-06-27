@@ -1,0 +1,53 @@
+<nav
+  class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0"
+  style="height: 50px"
+  *ngIf="shouldShow()"
+>
+  <button
+    type="button"
+    class="navbar-toggler me-4"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarCollapse"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <div class="navbar-nav ms-auto p-4 p-lg-0">
+      <div class="nav-item dropdown">
+        <a
+          [routerLink]="['/admin/landing-page']"
+          class="nav-link dropdown-toggle"
+          data-bs-toggle="dropdown"
+          >Manage Enrollments</a
+        >
+        <div class="dropdown-menu fade-up m-0">
+          <a [routerLink]="['/admin/vigyan-kendra']" class="dropdown-item" *ngIf="isAdminUser()"
+            >Vigyan Kendra</a
+          >
+          <a [routerLink]="['/admin/school']" class="dropdown-item" *ngIf="isVigyanKendraUserOrAdmin()">Schools</a>
+          <a [routerLink]="['/admin/exam-center']" class="dropdown-item" *ngIf="isVigyanKendraUserOrAdmin()"
+            >Exam centers</a
+          >
+          <a [routerLink]="['/admin/student']" class="dropdown-item" *ngIf="isVigyanKendraUserOrAdmin()"
+            >Students</a
+          >
+        </div>
+      </div>
+      <a [routerLink]="['/admin/student-class']" class="nav-item nav-link" *ngIf="isAdminUser()"
+        >Student Class</a
+      >
+      <a [routerLink]="['/admin/student-subjects']" class="nav-item nav-link" *ngIf="isAdminUser()"
+        >Subjects</a
+      >
+      <a [routerLink]="['/admin/enrollment-session']" class="nav-item nav-link" *ngIf="isAdminUser()"
+        >Enrollment Session</a
+      >
+      <a [routerLink]="['/admin/users']" class="nav-item nav-link" *ngIf="isAdminUser()">Users</a>
+      <a [routerLink]="['/admin/reporting']" class="nav-item nav-link" *ngIf="isVigyanKendraUserOrAdmin()">Reporting</a>
+    </div>
+    <!-- logout.component.html -->
+    <button mat-icon-button (click)="logout()" *ngIf="shouldShowLogoutButton()">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</nav>

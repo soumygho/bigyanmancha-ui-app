@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal } from '@angular/core';
+import { Component, inject, Inject, OnInit, signal } from '@angular/core';
 import { Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import StudentEnrollmentDialogData from '../../interface/student-enrollment-dialog-data';
 import EnrollmentDefault from '../../interface/enrollment-default';
+import { SchoolDetailsApiService } from '../../../api/services';
 
 @Component({
   selector: 'app-student-enrollment-form',
@@ -35,6 +36,7 @@ import EnrollmentDefault from '../../interface/enrollment-default';
   styleUrl: './student-enrollment-form.component.css',
 })
 export class StudentEnrollmentFormComponent implements OnInit {
+  private readonly schoolDetailsService = inject(SchoolDetailsApiService);
   readonly isEdit = this.data.rowData ? this.data.rowData : false;
   readonly title = this.isEdit ? 'Edit Enrollment' : 'New Enrollment';
   readonly genders = [
@@ -45,7 +47,7 @@ export class StudentEnrollmentFormComponent implements OnInit {
   private readonly rowData: StudentResponseDto = {};
   private readonly enrollmentDefault: EnrollmentDefault | undefined = undefined;
   readonly classList: StudentClassDetailsResponseDto[] = [];
-  readonly schoolList: SchoolDetailsResponseDto[] = [];
+  schoolList: SchoolDetailsResponseDto[] = [];
   readonly vigyanKendraList: VigyanKendraDetails[] = [];
   readonly filteredSchoolList = signal<SchoolDetailsResponseDto[]>([]);
   isAdminUser = false;
@@ -55,7 +57,7 @@ export class StudentEnrollmentFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<StudentEnrollmentFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: StudentEnrollmentDialogData
+    @Inject(MAT_DIALOG_DATA) public data: StudentEnrollmentDialogData,
   ) {
     this.rowData = this.data?.rowData ?? {};
     this.classList = this.data?.classList ?? [];
@@ -99,7 +101,9 @@ export class StudentEnrollmentFormComponent implements OnInit {
       const vigyanKendraDD = this.form?.get('vigyanKendraId');
       vigyanKendraDD?.patchValue(this.vigyanKendraList.at(0)?.id);
       this.filteredSchoolList.set(
-        this.schoolList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
+        this.schoolList.sort(
+          (a, b) => a.name?.localeCompare(b.name ?? '') ?? 0,
+        ),
       );
     }
     if (!this.isEdit) {
@@ -132,12 +136,14 @@ export class StudentEnrollmentFormComponent implements OnInit {
 
   private setFilteredSchools(id: number | undefined): void {
     if (id) {
-      let filteredList = [];
-      filteredList =
-        this.schoolList.filter((school) => school.vigyanKendraId === id) ?? [];
-      this.filteredSchoolList.set(
-        filteredList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
-      );
+      this.schoolDetailsService
+        .getAllSchoolsByBigyanKendra({ vigyanKendraId: id })
+        .subscribe((response) => {
+          this.filteredSchoolList.set(
+            response.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0),
+          );
+          this.schoolList = response;
+        });
     }
   }
 

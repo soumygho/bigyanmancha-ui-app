@@ -7,6 +7,7 @@ export interface EnrollmentReportingResponse {
   id?: number;
   reportDate?: string;
   reportKey?: string;
+  reportName?: string;
   status?: string;
   vigyanKendraCode?: string;
   vigyanKendraName?: string;

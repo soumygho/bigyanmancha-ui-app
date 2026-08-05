@@ -20,11 +20,38 @@ import { getAllReports } from '../fn/reporting-api/get-all-reports';
 import { GetAllReports$Params } from '../fn/reporting-api/get-all-reports';
 import { prepareReport } from '../fn/reporting-api/prepare-report';
 import { PrepareReport$Params } from '../fn/reporting-api/prepare-report';
+import { prepareStatisticsReport } from '../fn/reporting-api/prepare-statistics-report';
+import { PrepareStatisticsReport$Params } from '../fn/reporting-api/prepare-statistics-report';
 
 @Injectable({ providedIn: 'root' })
 export class ReportingApiService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `prepareStatisticsReport()` */
+  static readonly PrepareStatisticsReportPath = '/api/reporting/statistics';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `prepareStatisticsReport()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  prepareStatisticsReport$Response(params: PrepareStatisticsReport$Params, context?: HttpContext): Observable<StrictHttpResponse<EnrollmentReportingResponse>> {
+    return prepareStatisticsReport(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `prepareStatisticsReport$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  prepareStatisticsReport(params: PrepareStatisticsReport$Params, context?: HttpContext): Observable<EnrollmentReportingResponse> {
+    return this.prepareStatisticsReport$Response(params, context).pipe(
+      map((r: StrictHttpResponse<EnrollmentReportingResponse>): EnrollmentReportingResponse => r.body)
+    );
   }
 
   /** Path part for operation `getAllReports()` */
@@ -78,7 +105,7 @@ export class ReportingApiService extends BaseService {
   }
 
   /** Path part for operation `downloadExcel()` */
-  static readonly DownloadExcelPath = '/api/reporting/download/{key}';
+  static readonly DownloadExcelPath = '/api/reporting/download/{vigyanKendraCode}/{key}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

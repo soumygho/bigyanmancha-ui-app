@@ -11,18 +11,20 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { assignRollNumber } from '../fn/student-enrollment-api/assign-roll-number';
+import { AssignRollNumber$Params } from '../fn/student-enrollment-api/assign-roll-number';
 import { createStudent } from '../fn/student-enrollment-api/create-student';
 import { CreateStudent$Params } from '../fn/student-enrollment-api/create-student';
 import { deleteStudent } from '../fn/student-enrollment-api/delete-student';
 import { DeleteStudent$Params } from '../fn/student-enrollment-api/delete-student';
-import { generateDummyData } from '../fn/student-enrollment-api/generate-dummy-data';
-import { GenerateDummyData$Params } from '../fn/student-enrollment-api/generate-dummy-data';
 import { getAllStudents } from '../fn/student-enrollment-api/get-all-students';
 import { GetAllStudents$Params } from '../fn/student-enrollment-api/get-all-students';
 import { getAllStudentsByVigyanKendraId } from '../fn/student-enrollment-api/get-all-students-by-vigyan-kendra-id';
 import { GetAllStudentsByVigyanKendraId$Params } from '../fn/student-enrollment-api/get-all-students-by-vigyan-kendra-id';
 import { getStudentById } from '../fn/student-enrollment-api/get-student-by-id';
 import { GetStudentById$Params } from '../fn/student-enrollment-api/get-student-by-id';
+import { promoteStudentsToNextSession } from '../fn/student-enrollment-api/promote-students-to-next-session';
+import { PromoteStudentsToNextSession$Params } from '../fn/student-enrollment-api/promote-students-to-next-session';
 import { StudentResponseDto } from '../models/student-response-dto';
 import { updateStudent } from '../fn/student-enrollment-api/update-student';
 import { UpdateStudent$Params } from '../fn/student-enrollment-api/update-student';
@@ -108,6 +110,31 @@ export class StudentEnrollmentApiService extends BaseService {
     );
   }
 
+  /** Path part for operation `promoteStudentsToNextSession()` */
+  static readonly PromoteStudentsToNextSessionPath = '/api/students/promote-students';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `promoteStudentsToNextSession()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  promoteStudentsToNextSession$Response(params: PromoteStudentsToNextSession$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<StudentResponseDto>>> {
+    return promoteStudentsToNextSession(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `promoteStudentsToNextSession$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  promoteStudentsToNextSession(params: PromoteStudentsToNextSession$Params, context?: HttpContext): Observable<Array<StudentResponseDto>> {
+    return this.promoteStudentsToNextSession$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<StudentResponseDto>>): Array<StudentResponseDto> => r.body)
+    );
+  }
+
   /** Path part for operation `getStudentById()` */
   static readonly GetStudentByIdPath = '/api/students/{id}';
 
@@ -183,27 +210,27 @@ export class StudentEnrollmentApiService extends BaseService {
     );
   }
 
-  /** Path part for operation `generateDummyData()` */
-  static readonly GenerateDummyDataPath = '/api/students/generate';
+  /** Path part for operation `assignRollNumber()` */
+  static readonly AssignRollNumberPath = '/api/students/assign-roll-number/{classId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `generateDummyData()` instead.
+   * To access only the response body, use `assignRollNumber()` instead.
    *
    * This method doesn't expect any request body.
    */
-  generateDummyData$Response(params?: GenerateDummyData$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
-    return generateDummyData(this.http, this.rootUrl, params, context);
+  assignRollNumber$Response(params: AssignRollNumber$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return assignRollNumber(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `generateDummyData$Response()` instead.
+   * To access the full response (for headers, for example), `assignRollNumber$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  generateDummyData(params?: GenerateDummyData$Params, context?: HttpContext): Observable<string> {
-    return this.generateDummyData$Response(params, context).pipe(
+  assignRollNumber(params: AssignRollNumber$Params, context?: HttpContext): Observable<string> {
+    return this.assignRollNumber$Response(params, context).pipe(
       map((r: StrictHttpResponse<string>): string => r.body)
     );
   }

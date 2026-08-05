@@ -77,6 +77,7 @@ export class EnrollmentReportingGridComponent implements OnInit, OnDestroy {
     { field: 'enrollmentYear', headerName: 'Year', flex: 1 },
     { field: 'vigyanKendraName', headerName: 'Vigyankendra Name', flex: 1 },
     { field: 'vigyanKendraCode', headerName: 'Vigyankendra code', flex: 1 },
+    { field: 'reportName', headerName: 'Report Name', flex: 1 },
     {
       field: 'reportDate',
       headerName: 'Date',
@@ -175,5 +176,22 @@ export class EnrollmentReportingGridComponent implements OnInit, OnDestroy {
 
   onRefresh() {
     this.loadData();
+  }
+
+  generateStatisticReport() {
+    if (this.enrollmentSessionFilter()) {
+      this.reportingApiService
+        .prepareStatisticsReport({
+          body: {
+            enrollmentSessionId: this.enrollmentSessionFilter()!,
+            vigyanKendraId: 0,
+          },
+        })
+        .subscribe(() => {
+          this.loadData();
+        });
+    } else {
+      this.notificationService.show(`Please select both enrollment year.`);
+    }
   }
 }

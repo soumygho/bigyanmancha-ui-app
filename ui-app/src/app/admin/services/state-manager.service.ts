@@ -36,6 +36,7 @@ export class StateManagerService {
     subjects: [],
     classes: [],
     vigyanKendras: [],
+    examcenters: [],
     schools: [],
     initialized: false,
   });

@@ -55,7 +55,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 export class ExamCenterGridComponent {
   private readonly schoolDetailsService = inject(SchoolDetailsApiService);
   private readonly examCenterDetailsService = inject(
-    ExaminationCentreDetailsApiService
+    ExaminationCentreDetailsApiService,
   );
   private dialog: MatDialog = inject(MatDialog);
 
@@ -78,7 +78,7 @@ export class ExamCenterGridComponent {
         .filter((i) => i.schoolDetailsId === this.schoolFilter());
     } else if (this.vigyanKendraFilter()) {
       filteredData = this.data().filter(
-        (i) => i.vigyanKendraId === this.vigyanKendraFilter()
+        (i) => i.vigyanKendraId === this.vigyanKendraFilter(),
       );
     } else if (this.schoolFilter()) {
       filteredData = this.data().filter((i) => i.id === this.schoolFilter());
@@ -93,7 +93,7 @@ export class ExamCenterGridComponent {
     let filteredData: SchoolDetailsResponseDto[] = [];
     if (this.vigyanKendraFilter()) {
       filteredData = this.schoolList().filter(
-        (i) => i.vigyanKendraId === this.vigyanKendraFilter()
+        (i) => i.vigyanKendraId === this.vigyanKendraFilter(),
       );
     }
     filteredData = filteredData ?? [];
@@ -136,7 +136,7 @@ export class ExamCenterGridComponent {
           this.schoolList.set(state.schools);
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
   ngOnDestroy(): void {
@@ -231,7 +231,7 @@ export class ExamCenterGridComponent {
   // called from the “Actions” renderer
   private handleActionClick(
     evt: Event,
-    item: ExaminationCentreDetailsRequestDto
+    item: ExaminationCentreDetailsRequestDto,
   ) {
     if ((evt.target as HTMLElement).closest('.btn-edit'))
       return this.edit(item);
@@ -246,6 +246,12 @@ export class ExamCenterGridComponent {
     //reset school filter
     this.schoolFilter.set(undefined);
     this.vigyanKendraFilter.set(value);
+    //populate the examcenters data based on the selected vigyan kendra
+    this.examCenterDetailsService
+      .getAllExamCentersByVigyanKendraId({ vigyanKendraId: value })
+      .subscribe((response) => {
+        this.data.set(response);
+      });
   }
   setSchoolFilter(event: any) {
     const value = event.value;

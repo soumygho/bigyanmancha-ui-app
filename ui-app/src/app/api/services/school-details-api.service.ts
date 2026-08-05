@@ -17,6 +17,8 @@ import { deleteSchool } from '../fn/school-details-api/delete-school';
 import { DeleteSchool$Params } from '../fn/school-details-api/delete-school';
 import { getAllSchools } from '../fn/school-details-api/get-all-schools';
 import { GetAllSchools$Params } from '../fn/school-details-api/get-all-schools';
+import { getAllSchoolsByBigyanKendra } from '../fn/school-details-api/get-all-schools-by-bigyan-kendra';
+import { GetAllSchoolsByBigyanKendra$Params } from '../fn/school-details-api/get-all-schools-by-bigyan-kendra';
 import { getSchoolById } from '../fn/school-details-api/get-school-by-id';
 import { GetSchoolById$Params } from '../fn/school-details-api/get-school-by-id';
 import { removeExamCenter } from '../fn/school-details-api/remove-exam-center';
@@ -153,6 +155,31 @@ export class SchoolDetailsApiService extends BaseService {
   getSchoolById(params: GetSchoolById$Params, context?: HttpContext): Observable<SchoolDetailsResponseDto> {
     return this.getSchoolById$Response(params, context).pipe(
       map((r: StrictHttpResponse<SchoolDetailsResponseDto>): SchoolDetailsResponseDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllSchoolsByBigyanKendra()` */
+  static readonly GetAllSchoolsByBigyanKendraPath = '/api/schools/vigyan-kendra/{vigyanKendraId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllSchoolsByBigyanKendra()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllSchoolsByBigyanKendra$Response(params: GetAllSchoolsByBigyanKendra$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<SchoolDetailsResponseDto>>> {
+    return getAllSchoolsByBigyanKendra(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllSchoolsByBigyanKendra$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllSchoolsByBigyanKendra(params: GetAllSchoolsByBigyanKendra$Params, context?: HttpContext): Observable<Array<SchoolDetailsResponseDto>> {
+    return this.getAllSchoolsByBigyanKendra$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<SchoolDetailsResponseDto>>): Array<SchoolDetailsResponseDto> => r.body)
     );
   }
 

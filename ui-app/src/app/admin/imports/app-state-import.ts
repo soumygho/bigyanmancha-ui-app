@@ -1,10 +1,11 @@
-import { SchoolDetailsResponseDto, StudentResponseDto, SubjectDetailsResponseDto, VigyanKendraDetails } from "../../api/models";
+import { ExaminationCentreDetailsRequestDto, SchoolDetailsResponseDto, StudentResponseDto, SubjectDetailsResponseDto, VigyanKendraDetails } from "../../api/models";
 
 export interface GlobalState {
   subjects: SubjectDetailsResponseDto[] | [];
   classes: StudentResponseDto[] | [];
   vigyanKendras: VigyanKendraDetails[] | [];
   schools: SchoolDetailsResponseDto[] | [];
+  examcenters: ExaminationCentreDetailsRequestDto[] | [];
   initialized: boolean;
 }
 

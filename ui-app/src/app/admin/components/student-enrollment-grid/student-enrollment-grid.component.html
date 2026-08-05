@@ -1,23 +1,11 @@
 <!-- items-grid.component.html -->
 <div class="toolbar mt-5">
-  <button mat-raised-button color="primary" (click)="create()">
-    <mat-icon>add</mat-icon> New
-  </button>
-  <button
-    mat-raised-button
-    color="primary"
-    matTooltip="Refresh"
-    (click)="onRefresh()"
-    aria-label="Refresh"
-  >
-    <mat-icon>refresh</mat-icon>
-  </button>
-
-  <span class="flex-1"></span>
-
   <mat-form-field appearance="outline" class="filter">
     <mat-label>Filter VigyanKendra</mat-label>
-    <mat-select (selectionChange)="setVigyanKendraFilter($event)">
+    <mat-select
+      (selectionChange)="setVigyanKendraFilter($event)"
+      [value]="this.vigyanKendraFilter()"
+    >
       <mat-option
         *ngFor="let vigyanKendra of vigyanKendraList()"
         [value]="vigyanKendra.id"
@@ -29,7 +17,10 @@
 
   <mat-form-field appearance="outline" class="filter">
     <mat-label>Exam Center</mat-label>
-    <mat-select (selectionChange)="setExamCenterFilter($event)">
+    <mat-select
+      (selectionChange)="setExamCenterFilter($event)"
+      [value]="this.examCenterFilter()"
+    >
       <mat-option
         *ngFor="let examCenter of filteredExamCenters()"
         [value]="examCenter.id"
@@ -41,7 +32,10 @@
 
   <mat-form-field appearance="outline" class="filter">
     <mat-label>Filter School</mat-label>
-    <mat-select (selectionChange)="setSchoolFilter($event)">
+    <mat-select
+      (selectionChange)="setSchoolFilter($event)"
+      [value]="this.schoolFilter()"
+    >
       <mat-option *ngFor="let school of filteredSchool()" [value]="school.id">
         {{ school.name }}
       </mat-option>
@@ -49,12 +43,41 @@
   </mat-form-field>
   <mat-form-field appearance="outline" class="filter">
     <mat-label>Filter Class</mat-label>
-    <mat-select (selectionChange)="setClassFilter($event)">
+    <mat-select
+      (selectionChange)="setClassFilter($event)"
+      [value]="this.classFilter()"
+    >
       <mat-option
         *ngFor="let classDetails of studentClassDetailsList()"
         [value]="classDetails.id"
       >
         {{ classDetails.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <!-- Sex Dropdown -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Sex</mat-label>
+    <mat-select
+      (selectionChange)="setSexFilter($event)"
+      [value]="this.sexFilter()"
+    >
+      <mat-option *ngFor="let gender of genders" [value]="gender.value">
+        {{ gender.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Enrollment Session</mat-label>
+    <mat-select
+      (selectionChange)="setEnrollmentSessionFilter($event)"
+      [value]="this.enrollmentSessionfilter()"
+    >
+      <mat-option
+        *ngFor="let session of enrollmentSessionList()"
+        [value]="session.id"
+      >
+        {{ session.name }}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -65,10 +88,10 @@
     (click)="clearFilter()"
     aria-label="Clear applied filters"
   >
-    Clear Filter
+    Clear
   </button>
 </div>
-<div class="row">
+<!--<div class="row">
   <h2>Set Default School And Class For Enrollment</h2>
   <form [formGroup]="form" (ngSubmit)="setDefaultEnrollmentConfig()">
     <div class="flex-1">
@@ -125,11 +148,113 @@
       </button>
     </div>
   </form>
+</div> -->
+<div class="row">
+  <div class="flex-1">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="create()"
+      style="margin-right: 10px"
+    >
+      <mat-icon>add</mat-icon> New
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      matTooltip="Refresh"
+      (click)="onRefresh()"
+      aria-label="Refresh"
+    >
+      <mat-icon>refresh</mat-icon>
+    </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      matTooltip="Promote to next session"
+      (click)="promoteSelectedStudents()"
+      class="m-2"
+      aria-label="Promote to next session"
+    >
+      Promote
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      matTooltip="Set Default Enrollment Preference"
+      (click)="openDefaultEnrollmentPreferenceDialog()"
+      aria-label="Set Default Enrollment Preference"
+    >
+      Set Default
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="downloadReport()"
+      class="m-2"
+      aria-label="Download Enrollment Report"
+    >
+      <mat-icon>download</mat-icon>
+      Download Enrollment
+    </button>
+    @if (this.userLoggedInState()?.isAdminUser) {
+      <mat-form-field
+        appearance="outline"
+        class="filter"
+        style="margin-left: 10px"
+      >
+        <mat-label>Select VigyanKendra</mat-label>
+        <mat-select (selectionChange)="setVigyanKendraForFetching($event)">
+          <mat-option
+            *ngFor="let vigyanKendra of vigyanKendraList()"
+            [value]="vigyanKendra.id"
+          >
+            {{ vigyanKendra.code }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!--<button
+        mat-raised-button
+        color="primary"
+        matTooltip="Get By Vigyankendra"
+        (click)="getByVigyanKendra()"
+        class="m-2"
+        aria-label="Get By Vigyankendra"
+        style="margin-left: 10px"
+      >
+        Get By VigyanKendra
+      </button>-->
+    }
+    <mat-form-field
+      appearance="outline"
+      class="filter"
+      style="margin-left: 10px"
+    >
+      <input
+        matInput
+        placeholder="Search"
+        [(ngModel)]="searchText"
+        (keydown)="setNameFilter()"
+      />
+    </mat-form-field>
+  </div>
 </div>
 <div>
   <span
     >Total Records Count : <b>{{ filteredItems().length }}</b></span
   >
+  @if (this.defaultEnrollmentPreferenceSignal()) {
+    <span style="background-color: #60d607; padding: 5px; margin-left: 10px">
+      Preference :
+      <b
+        >VigyanKendra :
+        {{ this.defaultEnrollmentPreferenceSignal()?.vigyanKendraName }}, Class
+        : {{ this.defaultEnrollmentPreferenceSignal()?.className }}, School :
+        {{ this.defaultEnrollmentPreferenceSignal()?.schoolName }}</b
+      >
+    </span>
+  }
 </div>
 <div style="height: 600px; width: 100%">
   <ag-grid-angular
@@ -138,7 +263,7 @@
     [rowData]="filteredItems()"
     [columnDefs]="columnDefs"
     style="width: 100%; height: 600px"
-    rowSelection="single"
+    rowSelection="multiple"
     (gridReady)="onGridReady($event)"
   >
   </ag-grid-angular>

@@ -10,12 +10,14 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface DownloadExcel$Params {
+  vigyanKendraCode: string;
   key: string;
 }
 
 export function downloadExcel(http: HttpClient, rootUrl: string, params: DownloadExcel$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
   const rb = new RequestBuilder(rootUrl, downloadExcel.PATH, 'get');
   if (params) {
+    rb.path('vigyanKendraCode', params.vigyanKendraCode, {});
     rb.path('key', params.key, {});
   }
 
@@ -29,4 +31,4 @@ export function downloadExcel(http: HttpClient, rootUrl: string, params: Downloa
   );
 }
 
-downloadExcel.PATH = '/api/reporting/download/{key}';
+downloadExcel.PATH = '/api/reporting/download/{vigyanKendraCode}/{key}';

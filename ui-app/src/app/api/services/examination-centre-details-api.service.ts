@@ -22,6 +22,8 @@ import { DeleteExamCenter$Params } from '../fn/examination-centre-details-api/de
 import { ExaminationCentreDetailsRequestDto } from '../models/examination-centre-details-request-dto';
 import { getAllExamCenters } from '../fn/examination-centre-details-api/get-all-exam-centers';
 import { GetAllExamCenters$Params } from '../fn/examination-centre-details-api/get-all-exam-centers';
+import { getAllExamCentersByVigyanKendraId } from '../fn/examination-centre-details-api/get-all-exam-centers-by-vigyan-kendra-id';
+import { GetAllExamCentersByVigyanKendraId$Params } from '../fn/examination-centre-details-api/get-all-exam-centers-by-vigyan-kendra-id';
 import { getExamCenterById } from '../fn/examination-centre-details-api/get-exam-center-by-id';
 import { GetExamCenterById$Params } from '../fn/examination-centre-details-api/get-exam-center-by-id';
 import { updateExamCenter } from '../fn/examination-centre-details-api/update-exam-center';
@@ -205,6 +207,31 @@ export class ExaminationCentreDetailsApiService extends BaseService {
   deleteExamCenter(params: DeleteExamCenter$Params, context?: HttpContext): Observable<void> {
     return this.deleteExamCenter$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllExamCentersByVigyanKendraId()` */
+  static readonly GetAllExamCentersByVigyanKendraIdPath = '/api/examination-centres/vigyan-kendra/{vigyanKendraId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllExamCentersByVigyanKendraId()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllExamCentersByVigyanKendraId$Response(params: GetAllExamCentersByVigyanKendraId$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExaminationCentreDetailsRequestDto>>> {
+    return getAllExamCentersByVigyanKendraId(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllExamCentersByVigyanKendraId$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllExamCentersByVigyanKendraId(params: GetAllExamCentersByVigyanKendraId$Params, context?: HttpContext): Observable<Array<ExaminationCentreDetailsRequestDto>> {
+    return this.getAllExamCentersByVigyanKendraId$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<ExaminationCentreDetailsRequestDto>>): Array<ExaminationCentreDetailsRequestDto> => r.body)
     );
   }
 

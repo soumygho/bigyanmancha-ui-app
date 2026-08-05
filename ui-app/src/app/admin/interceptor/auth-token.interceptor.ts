@@ -24,9 +24,13 @@ export class AuthTokenInterceptor implements HttpInterceptor {
 
   intercept(
     req: HttpRequest<any>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    this.spinnerService.show();
+    const isHealthCheckRequest = req.url.includes('/api/hello');
+    if (!isHealthCheckRequest) {
+      this.spinnerService.show();
+    }
+
     const token = localStorage.getItem(LOCAL_STORAGE_KEY);
 
     const authReq = token
@@ -40,13 +44,14 @@ export class AuthTokenInterceptor implements HttpInterceptor {
           if (error.status === 401) {
             // Optional: Show a message/snackbar here
             this.notificationService.show(
-              'Session expired, please login again to continue.'
+              'Session expired, please login again to continue.',
             );
             // Clear any stored tokens
             this.authService.logout();
             // Redirect to login or unauthorized page
             this.router.navigate(['/admin/login']); // or `/unauthorized`
           } else {
+            if(!isHealthCheckRequest) {
             if (error?.error) {
               if (error.error instanceof Blob) {
                 blobToJson(error.error).then((json) => {
@@ -57,14 +62,15 @@ export class AuthTokenInterceptor implements HttpInterceptor {
                   this.notificationService.show(error.error.message);
                 } else {
                   this.notificationService.show(
-                    `There is some error occured in the server while processing your request.`
+                    `There is some error occured in the server while processing your request.`,
                   );
                 }
               }
             }
           }
+        }
           return throwError(() => error);
-        })
+        }),
       )
       .pipe(finalize(() => this.spinnerService.hide()));
   }

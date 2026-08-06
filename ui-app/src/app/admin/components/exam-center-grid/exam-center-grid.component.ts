@@ -252,6 +252,13 @@ export class ExamCenterGridComponent {
       .subscribe((response) => {
         this.data.set(response);
       });
+    if (this.globalStateManagerService.isAdminUser()) {
+      this.schoolDetailsService
+        .getAllSchoolsByBigyanKendra({ vigyanKendraId: value })
+        .subscribe((response) => {
+          this.schoolList.set(response);
+        });
+    }
   }
   setSchoolFilter(event: any) {
     const value = event.value;

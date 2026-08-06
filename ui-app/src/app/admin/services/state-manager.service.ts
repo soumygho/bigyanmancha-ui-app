@@ -172,4 +172,16 @@ export class StateManagerService {
       this._globalState.set(state);
     });
   }
+
+  isAdminUser(): boolean {
+    return this.getLoggedInUserState().isAdminUser;
+  }
+
+  isVigyanKendraUser(): boolean {
+    return this.getLoggedInUserState().isVigyanKendraUser;
+  }
+
+  isSchoolUser(): boolean {
+    return this.getLoggedInUserState().isSchoolUser;
+  }
 }

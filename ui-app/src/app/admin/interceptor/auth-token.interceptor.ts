@@ -51,27 +51,31 @@ export class AuthTokenInterceptor implements HttpInterceptor {
             // Redirect to login or unauthorized page
             this.router.navigate(['/admin/login']); // or `/unauthorized`
           } else {
-            if(!isHealthCheckRequest) {
-            if (error?.error) {
-              if (error.error instanceof Blob) {
-                blobToJson(error.error).then((json) => {
-                  this.notificationService.show(json?.message);
-                });
-              } else {
-                if (error.error.message) {
-                  this.notificationService.show(error.error.message);
+            if (!isHealthCheckRequest) {
+              if (error?.error) {
+                if (error.error instanceof Blob) {
+                  blobToJson(error.error).then((json) => {
+                    this.notificationService.show(json?.message);
+                  });
                 } else {
-                  this.notificationService.show(
-                    `There is some error occured in the server while processing your request.`,
-                  );
+                  if (error.error.message) {
+                    this.notificationService.show(error.error.message);
+                  } else {
+                    this.notificationService.show(
+                      `There is some error occured in the server while processing your request.`,
+                    );
+                  }
                 }
               }
             }
           }
-        }
           return throwError(() => error);
         }),
       )
-      .pipe(finalize(() => this.spinnerService.hide()));
+      .pipe(finalize(() => {
+        if (!isHealthCheckRequest) {
+          this.spinnerService.hide()
+        }
+      }));
   }
 }

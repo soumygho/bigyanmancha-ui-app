@@ -15,6 +15,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import ExamCenterDialogData from '../../interface/exam-center-dialog-data';
+import { SchoolDetailsApiService } from '../../../api/services';
+import { StateManagerService } from '../../services/state-manager.service';
 
 @Component({
   selector: 'app-exam-center-form',
@@ -37,7 +39,7 @@ export class ExamCenterFormComponent implements OnInit {
   readonly title = this.isEdit ? 'Edit Exam Center' : 'New Exam Center';
   private readonly rowData: ExaminationCentreDetailsRequestDto = {};
   readonly vigyanKendraList: VigyanKendraDetails[] = [];
-  readonly schoolList: SchoolDetailsResponseDto[] = [];
+  schoolList: SchoolDetailsResponseDto[] = [];
   readonly filteredSchoolList = signal<SchoolDetailsResponseDto[]>([]);
 
   form: any;
@@ -45,6 +47,8 @@ export class ExamCenterFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<ExamCenterFormComponent>,
+    private readonly schoolDetailsService: SchoolDetailsApiService,
+    private readonly globalStateManagerService: StateManagerService,
     @Inject(MAT_DIALOG_DATA) public data: ExamCenterDialogData
   ) {
     this.rowData = this.data?.rowData ?? {};
@@ -68,19 +72,40 @@ export class ExamCenterFormComponent implements OnInit {
     if (this.vigyanKendraList.length === 1) {
       const vigyanKendraDD = this.form?.get('vigyanKendraId');
       vigyanKendraDD?.patchValue(this.vigyanKendraList.at(0)?.id);
-      this.filteredSchoolList.set(
-        this.schoolList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
-      );
+      this.resolveSchools(this.vigyanKendraList.at(0)?.id);
+      if (this.globalStateManagerService.isAdminUser()) {
+        this.filteredSchoolList.set(
+          this.schoolList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
+        );
+      }
     }
   }
 
   private setFilteredSchools(id: number): void {
     let filteredList = [];
-    filteredList =
-      this.schoolList.filter((school) => school.vigyanKendraId === id) ?? [];
-    this.filteredSchoolList.set(
-      filteredList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
-    );
+    this.resolveSchools(id);
+    if (!this.globalStateManagerService.isAdminUser()) {
+      filteredList =
+        this.schoolList.filter((school) => school.vigyanKendraId === id) ?? [];
+      this.filteredSchoolList.set(
+        filteredList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
+      );
+    }
+  }
+
+  private resolveSchools(vigyanKendraId: number | undefined): void {
+    if (this.globalStateManagerService.isAdminUser() && vigyanKendraId) {
+      this.schoolDetailsService
+        .getAllSchoolsByBigyanKendra({ vigyanKendraId: vigyanKendraId })
+        .subscribe((response) => {
+          this.schoolList = [...response];
+          let filteredList =
+            this.schoolList.filter((school) => school.vigyanKendraId === vigyanKendraId) ?? [];
+          this.filteredSchoolList.set(
+            filteredList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
+          );
+        });
+    }
   }
 
   save() {

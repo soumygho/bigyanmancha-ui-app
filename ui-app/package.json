@@ -5,6 +5,7 @@
     "ng-openapi-gen": "ng-openapi-gen",
     "ng": "ng",
     "start": "ng-openapi-gen && ng serve",
+    "serve": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

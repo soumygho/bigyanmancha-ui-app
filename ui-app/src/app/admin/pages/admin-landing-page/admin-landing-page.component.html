@@ -1,9 +1,0 @@
-<div class="m-auto">
-  Welcome <b>{{this.userLoggedInState()?.username}}</b> to admin dashboard.
-  <p *ngIf="this.userLoggedInState()?.isAdminUser">
-    <b>You are an Admin User</b>
-  </p>
-  <p *ngIf="this.userLoggedInState()?.isVigyanKendraUser">
-    You are an Vigyan Kendra User in Vigyan Kendra <b>{{userLoggedInState()?.vigyanKendraCode}}</b>
-  </p>
-</div>

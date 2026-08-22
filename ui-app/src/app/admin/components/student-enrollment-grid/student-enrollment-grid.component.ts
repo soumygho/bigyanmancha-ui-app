@@ -46,6 +46,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DefaultEnrollmentPreferenceComponent } from '../default-enrollment-preference/default-enrollment-preference.component';
 import { sortEnrollments } from '../../utility/enrollment-sort-utility';
 import exportToExcel from '../../utility/excel-exporter-utility';
+import { DrsheetServiceService } from '../../services/pdf/drsheet-service.service';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -68,6 +69,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   private readonly enrollmentService = inject(StudentEnrollmentApiService);
+  private readonly drSheetService = inject(DrsheetServiceService);
   private dialog: MatDialog = inject(MatDialog);
   private readonly globalStateManagerService: StateManagerService =
     inject(StateManagerService);
@@ -316,7 +318,7 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
         );
       });
     } else {
-      if(this.vigyanKendraForFetch()) {
+      if (this.vigyanKendraForFetch()) {
         this.getEnrollmentsByVigyanKendra(this.vigyanKendraForFetch()!);
       }
     }
@@ -618,17 +620,44 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
 
   downloadReport() {
     let filteredData = this.filteredItems()
-    .map((item) => ({
-      Name: item.name,
-      Class: item.className,
-      Roll: item.roll,
-      Number: item.number,
-      School: item.schoolName,
-      Sex: item.sex,
-      ExaminationCentre: item.examinationCentreName,
-      EnrollmentYear: item.enrollmentYear,
-    }));
-    return exportToExcel(filteredData, 'Enrollment-Report.xlsx', 'Enrollments-'+this.vigyanKendraForFetch()+'-'+new Date().toISOString().split('T')[0]);
+      .map((item) => ({
+        Name: item.name,
+        Class: item.className,
+        Roll: item.roll,
+        Number: item.number,
+        School: item.schoolName,
+        Sex: item.sex,
+        ExaminationCentre: item.examinationCentreName,
+        EnrollmentYear: item.enrollmentYear,
+      }));
+    let sheetName = 'Enrollments-' + this.vigyanKendraForFetch();
+    let filename = 'Enrollment-Report-' + this.vigyanKendraForFetch() + '.xlsx';
+    if (!this.userLoggedInState()?.isAdminUser) {
+      sheetName = 'Enrollments-' + this.userLoggedInState()?.vigyanKendraCode;
+      filename = 'Enrollment-Report-' + this.userLoggedInState()?.vigyanKendraCode + '.xlsx';
+    }
+    return exportToExcel(filteredData, filename, sheetName);
+  }
+
+  downloadDrSheet() {
+    if (this.userLoggedInState()?.isAdminUser) {
+      if (!this.vigyanKendraForFetch()) {
+        this.notficationService.show(`Please select a vigyankendra to download DR Sheet.`);
+        return;
+      }
+      const classId = this.classFilter() ? Number.parseInt(this.classFilter()!) : undefined;
+      const examCenterId = this.examCenterFilter() ? Number.parseInt(this.examCenterFilter()!) : undefined;;
+      this.enrollmentService.getDrSheetData({ body: { vigyanKendraId: this.vigyanKendraForFetch()!, examCenterId: examCenterId, classId: classId } }).subscribe((response) => {
+        if (response && response.length > 0) {
+          //need to create pdf based on class and exam center
+          this.drSheetService.generatePdf(response).then(() => {
+            this.notficationService.show(`DR Sheet data fetched. Please check download folder for details.`);
+          });
+        } else {
+          this.notficationService.show(`No data found for DR Sheet.`);
+        }
+      });
+    }
   }
 
   promoteSelectedStudents() {

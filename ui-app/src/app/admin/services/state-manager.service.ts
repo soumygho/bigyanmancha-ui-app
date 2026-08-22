@@ -15,7 +15,6 @@ import {
 } from '../imports/app-state-import';
 import { JwtHelperService } from './jwt-helper.service';
 import { LoadingSpinnerService } from './loading-spinner.service';
-import { delay, finalize } from 'rxjs';
 import { NotificationService } from './notification.service';
 @Injectable({
   providedIn: 'root',

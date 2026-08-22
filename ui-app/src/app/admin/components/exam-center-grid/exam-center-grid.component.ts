@@ -161,6 +161,9 @@ export class ExamCenterGridComponent {
   loadData() {
     this.examCenterDetailsService.getAllExamCenters().subscribe((response) => {
       this.data.set(response);
+      this.schoolDetailsService.getAllSchools().subscribe((response) => {
+        this.schoolList.set(response);
+      });
     });
   }
 
@@ -251,14 +254,12 @@ export class ExamCenterGridComponent {
       .getAllExamCentersByVigyanKendraId({ vigyanKendraId: value })
       .subscribe((response) => {
         this.data.set(response);
+        this.schoolDetailsService
+          .getAllSchoolsByBigyanKendra({ vigyanKendraId: value })
+          .subscribe((response) => {
+            this.schoolList.set(response);
+          });
       });
-    if (this.globalStateManagerService.isAdminUser()) {
-      this.schoolDetailsService
-        .getAllSchoolsByBigyanKendra({ vigyanKendraId: value })
-        .subscribe((response) => {
-          this.schoolList.set(response);
-        });
-    }
   }
   setSchoolFilter(event: any) {
     const value = event.value;

@@ -73,11 +73,9 @@ export class ExamCenterFormComponent implements OnInit {
       const vigyanKendraDD = this.form?.get('vigyanKendraId');
       vigyanKendraDD?.patchValue(this.vigyanKendraList.at(0)?.id);
       this.resolveSchools(this.vigyanKendraList.at(0)?.id);
-      if (this.globalStateManagerService.isAdminUser()) {
-        this.filteredSchoolList.set(
-          this.schoolList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
-        );
-      }
+      this.filteredSchoolList.set(
+        this.schoolList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
+      );
     }
   }
 
@@ -105,6 +103,8 @@ export class ExamCenterFormComponent implements OnInit {
             filteredList.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0)
           );
         });
+    } else {
+      this.schoolList = [...this.data.schoolList];
     }
   }
 

@@ -17,10 +17,13 @@ import { createStudent } from '../fn/student-enrollment-api/create-student';
 import { CreateStudent$Params } from '../fn/student-enrollment-api/create-student';
 import { deleteStudent } from '../fn/student-enrollment-api/delete-student';
 import { DeleteStudent$Params } from '../fn/student-enrollment-api/delete-student';
+import { DrSheetResponse } from '../models/dr-sheet-response';
 import { getAllStudents } from '../fn/student-enrollment-api/get-all-students';
 import { GetAllStudents$Params } from '../fn/student-enrollment-api/get-all-students';
 import { getAllStudentsByVigyanKendraId } from '../fn/student-enrollment-api/get-all-students-by-vigyan-kendra-id';
 import { GetAllStudentsByVigyanKendraId$Params } from '../fn/student-enrollment-api/get-all-students-by-vigyan-kendra-id';
+import { getDrSheetData } from '../fn/student-enrollment-api/get-dr-sheet-data';
+import { GetDrSheetData$Params } from '../fn/student-enrollment-api/get-dr-sheet-data';
 import { getStudentById } from '../fn/student-enrollment-api/get-student-by-id';
 import { GetStudentById$Params } from '../fn/student-enrollment-api/get-student-by-id';
 import { promoteStudentsToNextSession } from '../fn/student-enrollment-api/promote-students-to-next-session';
@@ -132,6 +135,31 @@ export class StudentEnrollmentApiService extends BaseService {
   promoteStudentsToNextSession(params: PromoteStudentsToNextSession$Params, context?: HttpContext): Observable<Array<StudentResponseDto>> {
     return this.promoteStudentsToNextSession$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<StudentResponseDto>>): Array<StudentResponseDto> => r.body)
+    );
+  }
+
+  /** Path part for operation `getDrSheetData()` */
+  static readonly GetDrSheetDataPath = '/api/students/dr-sheet';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDrSheetData()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  getDrSheetData$Response(params: GetDrSheetData$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DrSheetResponse>>> {
+    return getDrSheetData(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getDrSheetData$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  getDrSheetData(params: GetDrSheetData$Params, context?: HttpContext): Observable<Array<DrSheetResponse>> {
+    return this.getDrSheetData$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<DrSheetResponse>>): Array<DrSheetResponse> => r.body)
     );
   }
 

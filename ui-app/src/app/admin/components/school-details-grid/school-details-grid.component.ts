@@ -166,23 +166,24 @@ export class SchoolDetailsGridComponent implements OnInit, OnDestroy {
         })
         .subscribe((response) => {
           this.data.set(response);
+          this.examCenterDetailsService
+            .getAllExamCentersByVigyanKendraId({
+              vigyanKendraId: this.vigyanKendraFilter()!,
+            })
+            .subscribe((response) => {
+              this.examCenterList.set(response);
+            });
         });
-      this.examCenterDetailsService
-        .getAllExamCentersByVigyanKendraId({
-          vigyanKendraId: this.vigyanKendraFilter()!,
-        })
-        .subscribe((response) => {
-          this.examCenterList.set(response);
-        });
+
     } else {
       this.schoolDetailsService.getAllSchools().subscribe((response) => {
         this.data.set(response);
+        this.examCenterDetailsService
+          .getAllExamCenters()
+          .subscribe((response) => {
+            this.examCenterList.set(response);
+          });
       });
-      this.examCenterDetailsService
-        .getAllExamCenters()
-        .subscribe((response) => {
-          this.examCenterList.set(response);
-        });
     }
   }
 
@@ -269,6 +270,13 @@ export class SchoolDetailsGridComponent implements OnInit, OnDestroy {
       .getAllSchoolsByBigyanKendra({ vigyanKendraId: value })
       .subscribe((response) => {
         this.data.set(response);
+        this.examCenterDetailsService
+          .getAllExamCentersByVigyanKendraId({
+            vigyanKendraId: this.vigyanKendraFilter()!,
+          })
+          .subscribe((response) => {
+            this.examCenterList.set(response);
+          });
       });
   }
   setSchoolFilter(event: any) {

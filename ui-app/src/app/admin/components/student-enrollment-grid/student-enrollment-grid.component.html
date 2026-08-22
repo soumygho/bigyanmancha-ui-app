@@ -196,9 +196,19 @@
       aria-label="Download Enrollment Report"
     >
       <mat-icon>download</mat-icon>
-      Download Enrollment
+      Enrollment
     </button>
     @if (this.userLoggedInState()?.isAdminUser) {
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="downloadDrSheet()"
+        class="m-2"
+        aria-label="Download DR Sheet"
+      >
+        <mat-icon>download</mat-icon>
+        DRSheet
+      </button>
       <mat-form-field
         appearance="outline"
         class="filter"

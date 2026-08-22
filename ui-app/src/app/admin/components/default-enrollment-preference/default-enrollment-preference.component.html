@@ -1,0 +1,83 @@
+<div class="form-container">
+  <div class="row">
+    <h2 mat-dialog-title>Set Default School And Class For Enrollment</h2>
+    <form [formGroup]="form" (ngSubmit)="setDefaultEnrollmentConfig()">
+      <mat-card>
+        <mat-card-content>
+          <div class="flex-1">
+            <mat-form-field appearance="outline" class="filter me-2">
+              <mat-label>Select VigyanKendra</mat-label>
+              <mat-select
+                (selectionChange)="setDefaultVigyanKendra($event)"
+                formControlName="vigyanKendraId"
+              >
+                <mat-option
+                  *ngFor="let vigyanKendra of vigyanKendraList()"
+                  [value]="vigyanKendra.id"
+                >
+                  {{ vigyanKendra.code }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="flex-1">
+            <mat-form-field appearance="outline" class="filter me-2">
+              <mat-label>Select School</mat-label>
+              <mat-select
+                (selectionChange)="setDefaultSchool($event)"
+                formControlName="schoolId"
+              >
+                <mat-option
+                  *ngFor="let school of defaultSchoolList()"
+                  [value]="school.id"
+                >
+                  {{ school.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="flex-1">
+            <mat-form-field appearance="outline" class="filter me-2">
+              <mat-label>Select Class</mat-label>
+              <mat-select
+                (selectionChange)="setDefaultClass($event)"
+                formControlName="classId"
+              >
+                <mat-option
+                  *ngFor="let classDetails of studentClassDetailsList()"
+                  [value]="classDetails.id"
+                >
+                  {{ classDetails.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button
+            mat-raised-button
+            color="primary"
+            matTooltip="Set Default School and Class for Enrollment"
+            type="submit"
+            aria-label="Set Default School and Class for Enrollment"
+            class="m-2"
+          >
+            Save
+          </button>
+          <button
+            mat-raised-button
+            color="warn"
+            type="button"
+            (click)="resetForm()"
+            class="m-2"
+          >
+            Reset
+          </button>
+          <button mat-stroked-button (click)="onCancel()" class="m-2">
+            Cancel
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+  </div>
+</div>

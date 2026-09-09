@@ -12,6 +12,7 @@ export type { ExaminationCentreDetailsRequestDto } from './models/examination-ce
 export type { JwtResponse } from './models/jwt-response';
 export type { LoginRequest } from './models/login-request';
 export type { Role } from './models/role';
+export type { RollNumberAssignmentStatus } from './models/roll-number-assignment-status';
 export type { SchoolAssignDeAssignRequest } from './models/school-assign-de-assign-request';
 export type { SchoolDetails } from './models/school-details';
 export type { SchoolDetailsRequestDto } from './models/school-details-request-dto';

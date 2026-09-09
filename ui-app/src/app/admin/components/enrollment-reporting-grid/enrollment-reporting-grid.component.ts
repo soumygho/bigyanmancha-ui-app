@@ -191,7 +191,7 @@ export class EnrollmentReportingGridComponent implements OnInit, OnDestroy {
           this.loadData();
         });
     } else {
-      this.notificationService.show(`Please select both enrollment year.`);
+      this.notificationService.show(`Please select enrollment year.`);
     }
   }
 }

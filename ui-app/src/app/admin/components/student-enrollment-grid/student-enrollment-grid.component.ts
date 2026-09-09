@@ -334,6 +334,26 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
         );
       });
   }
+  //assign roll numbers to all students in a vigyan kendra
+  assignRollNumbersByVigyanKendra(vigyanKendraId: number) {
+    this.enrollmentService
+      .assignRollNumber({ vigyanKendraId: vigyanKendraId })
+      .subscribe((response) => {
+        this.notficationService.show(
+          `Roll number assignment status: ${response.message ?? 'No message returned from server'}`,
+        );
+      });
+  }
+  //get roll number assignment status
+  getRollNumberAssignmentStatusByVigyanKendra(vigyanKendraId: number) {
+    this.enrollmentService
+      .getRollNumberAssignmentStatus({ vigyanKendraId: vigyanKendraId })
+      .subscribe((response) => {
+        this.notficationService.show(
+          `Roll number assignment status: ${response.message ?? 'No message returned from server'}`,
+        );
+      });
+  }
 
   create() {
     this.dialog
@@ -543,6 +563,22 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   getByVigyanKendra() {
     if (this.vigyanKendraForFetch()) {
       this.getEnrollmentsByVigyanKendra(this.vigyanKendraForFetch()!);
+    } else {
+      this.notficationService.show(`Please select a vigyankendra.`);
+    }
+  }
+
+  assignRollNumber() {
+    if (this.vigyanKendraForFetch()) {
+      this.assignRollNumbersByVigyanKendra(this.vigyanKendraForFetch()!);
+    } else {
+      this.notficationService.show(`Please select a vigyankendra.`);
+    }
+  }
+
+  getRollNumberAssignmentStatus() {
+    if (this.vigyanKendraForFetch()) {
+      this.getRollNumberAssignmentStatusByVigyanKendra(this.vigyanKendraForFetch()!);
     } else {
       this.notficationService.show(`Please select a vigyankendra.`);
     }

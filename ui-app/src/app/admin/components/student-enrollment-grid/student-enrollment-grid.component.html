@@ -224,17 +224,28 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <!--<button
+      <button
         mat-raised-button
         color="primary"
         matTooltip="Get By Vigyankendra"
-        (click)="getByVigyanKendra()"
+        (click)="assignRollNumber()"
         class="m-2"
-        aria-label="Get By Vigyankendra"
+        aria-label="Assign Roll Number"
         style="margin-left: 10px"
       >
-        Get By VigyanKendra
-      </button>-->
+        Assign Roll Number
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        matTooltip="Get By Vigyankendra"
+        (click)="getRollNumberAssignmentStatus()"
+        class="m-2"
+        aria-label="Get Roll Number Assignment Status"
+        style="margin-left: 10px"
+      >
+        Assignment Status
+      </button>
     }
     <mat-form-field
       appearance="outline"

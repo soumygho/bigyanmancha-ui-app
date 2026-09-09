@@ -178,7 +178,7 @@ export class DrsheetServiceService {
         // No.
         this.drawCenteredText(
           page,
-          candidate.no!,
+          candidate.no!+'',
           c.no.centerX,
           y,
           7.5,

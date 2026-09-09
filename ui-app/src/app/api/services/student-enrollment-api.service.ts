@@ -24,10 +24,13 @@ import { getAllStudentsByVigyanKendraId } from '../fn/student-enrollment-api/get
 import { GetAllStudentsByVigyanKendraId$Params } from '../fn/student-enrollment-api/get-all-students-by-vigyan-kendra-id';
 import { getDrSheetData } from '../fn/student-enrollment-api/get-dr-sheet-data';
 import { GetDrSheetData$Params } from '../fn/student-enrollment-api/get-dr-sheet-data';
+import { getRollNumberAssignmentStatus } from '../fn/student-enrollment-api/get-roll-number-assignment-status';
+import { GetRollNumberAssignmentStatus$Params } from '../fn/student-enrollment-api/get-roll-number-assignment-status';
 import { getStudentById } from '../fn/student-enrollment-api/get-student-by-id';
 import { GetStudentById$Params } from '../fn/student-enrollment-api/get-student-by-id';
 import { promoteStudentsToNextSession } from '../fn/student-enrollment-api/promote-students-to-next-session';
 import { PromoteStudentsToNextSession$Params } from '../fn/student-enrollment-api/promote-students-to-next-session';
+import { RollNumberAssignmentStatus } from '../models/roll-number-assignment-status';
 import { StudentResponseDto } from '../models/student-response-dto';
 import { updateStudent } from '../fn/student-enrollment-api/update-student';
 import { UpdateStudent$Params } from '../fn/student-enrollment-api/update-student';
@@ -238,8 +241,33 @@ export class StudentEnrollmentApiService extends BaseService {
     );
   }
 
+  /** Path part for operation `getRollNumberAssignmentStatus()` */
+  static readonly GetRollNumberAssignmentStatusPath = '/api/students/roll-number-assignment-status/{vigyanKendraId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getRollNumberAssignmentStatus()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRollNumberAssignmentStatus$Response(params: GetRollNumberAssignmentStatus$Params, context?: HttpContext): Observable<StrictHttpResponse<RollNumberAssignmentStatus>> {
+    return getRollNumberAssignmentStatus(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getRollNumberAssignmentStatus$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRollNumberAssignmentStatus(params: GetRollNumberAssignmentStatus$Params, context?: HttpContext): Observable<RollNumberAssignmentStatus> {
+    return this.getRollNumberAssignmentStatus$Response(params, context).pipe(
+      map((r: StrictHttpResponse<RollNumberAssignmentStatus>): RollNumberAssignmentStatus => r.body)
+    );
+  }
+
   /** Path part for operation `assignRollNumber()` */
-  static readonly AssignRollNumberPath = '/api/students/assign-roll-number/{classId}';
+  static readonly AssignRollNumberPath = '/api/students/assign-roll-number/{vigyanKendraId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -247,7 +275,7 @@ export class StudentEnrollmentApiService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  assignRollNumber$Response(params: AssignRollNumber$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+  assignRollNumber$Response(params: AssignRollNumber$Params, context?: HttpContext): Observable<StrictHttpResponse<RollNumberAssignmentStatus>> {
     return assignRollNumber(this.http, this.rootUrl, params, context);
   }
 
@@ -257,9 +285,9 @@ export class StudentEnrollmentApiService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  assignRollNumber(params: AssignRollNumber$Params, context?: HttpContext): Observable<string> {
+  assignRollNumber(params: AssignRollNumber$Params, context?: HttpContext): Observable<RollNumberAssignmentStatus> {
     return this.assignRollNumber$Response(params, context).pipe(
-      map((r: StrictHttpResponse<string>): string => r.body)
+      map((r: StrictHttpResponse<RollNumberAssignmentStatus>): RollNumberAssignmentStatus => r.body)
     );
   }
 

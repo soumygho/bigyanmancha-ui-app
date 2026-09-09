@@ -10,12 +10,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { RollNumberAssignmentStatus } from '../../models/roll-number-assignment-status';
 
-export interface AssignRollNumber$Params {
+export interface GetRollNumberAssignmentStatus$Params {
   vigyanKendraId: number;
 }
 
-export function assignRollNumber(http: HttpClient, rootUrl: string, params: AssignRollNumber$Params, context?: HttpContext): Observable<StrictHttpResponse<RollNumberAssignmentStatus>> {
-  const rb = new RequestBuilder(rootUrl, assignRollNumber.PATH, 'get');
+export function getRollNumberAssignmentStatus(http: HttpClient, rootUrl: string, params: GetRollNumberAssignmentStatus$Params, context?: HttpContext): Observable<StrictHttpResponse<RollNumberAssignmentStatus>> {
+  const rb = new RequestBuilder(rootUrl, getRollNumberAssignmentStatus.PATH, 'get');
   if (params) {
     rb.path('vigyanKendraId', params.vigyanKendraId, {});
   }
@@ -30,4 +30,4 @@ export function assignRollNumber(http: HttpClient, rootUrl: string, params: Assi
   );
 }
 
-assignRollNumber.PATH = '/api/students/assign-roll-number/{vigyanKendraId}';
+getRollNumberAssignmentStatus.PATH = '/api/students/roll-number-assignment-status/{vigyanKendraId}';

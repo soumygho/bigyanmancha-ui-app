@@ -17,6 +17,8 @@ export class HealthCheckService implements OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly healthCheckUrl =
     `${environment.apiBaseUrl}/api/hello`;
+  private readonly reportingHealthCheckUrl =
+    `${environment.reportingBaseUrl}/api/hello`;
 
   constructor(private http: HttpClient) {}
 
@@ -36,6 +38,23 @@ export class HealthCheckService implements OnDestroy {
       )
       .subscribe(response => {
         console.log('Health check response:', response);
+      });
+
+      interval(40000)
+      .pipe(
+        startWith(0), // Perform the first reporting health check immediately
+        takeUntil(this.destroy$),
+        exhaustMap(() =>
+          this.http.get(this.reportingHealthCheckUrl).pipe(
+            catchError(error => {
+              console.error('Reporting health check failed:', error);
+              return EMPTY;
+            })
+          )
+        )
+      )
+      .subscribe(response => {
+        console.log('Reporting health check response:', response);
       });
   }
 

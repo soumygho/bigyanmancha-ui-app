@@ -14,6 +14,8 @@ import { AdminAuthService } from '../services/admin-auth.service';
 import { LOCAL_STORAGE_KEY } from '../imports/admin-const';
 import blobToJson from './blob-to-json-utility';
 import { LoadingSpinnerService } from '../services/loading-spinner.service';
+import { environment } from '../../../environments/environment';
+import { REPORTING_SERVER_TOKEN } from '../services/reporting-auth-service';
 
 @Injectable()
 export class AuthTokenInterceptor implements HttpInterceptor {
@@ -30,12 +32,22 @@ export class AuthTokenInterceptor implements HttpInterceptor {
     if (!isHealthCheckRequest) {
       this.spinnerService.show();
     }
+    const isReportingRequest = req.url.startsWith(environment.reportingBaseUrl);
+    const isReportingLoginRequest =
+      req.url === `${environment.reportingBaseUrl}/api/auth/signin`;
 
-    const token = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const token = isReportingRequest
+      ? sessionStorage.getItem(REPORTING_SERVER_TOKEN)
+      : localStorage.getItem(LOCAL_STORAGE_KEY);
 
-    const authReq = token
-      ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
-      : req;
+    const authReq =
+      token && !isReportingLoginRequest
+        ? req.clone({
+          setHeaders: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        : req;
 
     return next
       .handle(authReq)

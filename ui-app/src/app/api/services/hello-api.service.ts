@@ -44,5 +44,4 @@ export class HelloApiService extends BaseService {
       map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
-
 }

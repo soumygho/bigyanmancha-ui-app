@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { jwtDecode } from 'jwt-decode';
 import { AdminAuthService } from '../../services/admin-auth.service';
 import { NotificationService } from '../../services/notification.service';
+import { ReportingAuthService } from '../../services/reporting-auth-service';
 
 @Component({
   selector: 'app-admin-login-form',
@@ -40,6 +41,7 @@ export class AdminLoginFormComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authService = inject(AdminAuthService);
   private readonly notficationService = inject(NotificationService);
+  private readonly reportingAuthService = inject(ReportingAuthService);
 
   form: any;
 
@@ -59,6 +61,14 @@ export class AdminLoginFormComponent implements OnInit {
         this.globalStateManagerService.mutateLoggedInUserState(resp, true);
         this.authService.login(resp?.jwt!);
         this.router.navigate(['/admin/landing-page']);
+      },
+      error: (err) => {
+        this.notficationService.show('Login failed, Please try again with valid credentials!');
+      }
+    });
+    this.reportingAuthService.authenticate(this.form.value).subscribe({
+      next: (resp) => {
+        console.log(`Reporting auth successful!`);
       },
       error: (err) => {
         this.notficationService.show('Login failed, Please try again with valid credentials!');

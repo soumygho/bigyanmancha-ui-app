@@ -47,6 +47,7 @@ import { DefaultEnrollmentPreferenceComponent } from '../default-enrollment-pref
 import { sortEnrollments } from '../../utility/enrollment-sort-utility';
 import exportToExcel from '../../utility/excel-exporter-utility';
 import { DrsheetServiceService } from '../../services/pdf/drsheet-service.service';
+import { RollNumberAssignmentService } from '../../services/roll-number-Service';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -82,6 +83,7 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
     EnrollmentSessionManagementApiService,
   );
   readonly localStorageService = inject(LocalStorageService);
+  private readonly rollNumberService = inject(RollNumberAssignmentService);
 
   private readonly dialogConfig = dialogConfig;
   //local state
@@ -336,8 +338,8 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   }
   //assign roll numbers to all students in a vigyan kendra
   assignRollNumbersByVigyanKendra(vigyanKendraId: number) {
-    this.enrollmentService
-      .assignRollNumber({ vigyanKendraId: vigyanKendraId })
+    this.rollNumberService
+      .assignRollNumbers(vigyanKendraId)
       .subscribe((response) => {
         this.notficationService.show(
           `Roll number assignment status: ${response.message ?? 'No message returned from server'}`,
@@ -346,8 +348,8 @@ export class StudentEnrollmentGridComponent implements OnInit, OnDestroy {
   }
   //get roll number assignment status
   getRollNumberAssignmentStatusByVigyanKendra(vigyanKendraId: number) {
-    this.enrollmentService
-      .getRollNumberAssignmentStatus({ vigyanKendraId: vigyanKendraId })
+    this.rollNumberService
+      .getAssignmentStatus(vigyanKendraId)
       .subscribe((response) => {
         this.notficationService.show(
           `Roll number assignment status: ${response.message ?? 'No message returned from server'}`,
